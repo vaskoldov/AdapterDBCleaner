@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="DEBUG">
+    <Appenders>
+        <appender name="stderr" class="org.apache.log4j.ConsoleAppender">
+            <param name="threshold" value="info" />
+            <param name="target" value="System.err"/>
+            <layout class="org.apache.log4j.PatternLayout">
+                <param name="ConversionPattern" value="%-5p %d [%t][%F:%L] : %m%n" />
+            </layout>
+        </appender>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} [%t] %-5level %logger{36} - %msg%n"/>
+        </Console>
+        <RollingFile
+                name="rollingFile"
+                fileName="logs/ts.log"
+                filePattern="logs/ts.%i.log.gz"
+                ignoreExceptions="false">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} [%t] %-5level %logger{36} - %msg%n"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="10MB" />
+            </Policies>
+            <DefaultRolloverStrategy max="10" />
+        </RollingFile>
+    </Appenders>
+    <Loggers>
+        <Root level="info">
+            <AppenderRef ref="stderr"/>
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="rollingFile"/>
+        </Root>
+    </Loggers>
+</Configuration>

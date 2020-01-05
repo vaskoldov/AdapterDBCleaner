@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
+    <data-source source="LOCAL" name="adapter" uuid="ee8e55f5-5785-4397-8cb5-ee7e0d0865f7">
+      <driver-ref>h2.unified</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.h2.Driver</jdbc-driver>
+      <jdbc-url>jdbc:h2:file:C:/Temp/db/adapter;IFEXISTS=TRUE;AUTO_SERVER=TRUE</jdbc-url>
+    </data-source>
+    <data-source source="LOCAL" name="configuration" uuid="ffab4b96-b383-4d8d-aff3-3a9bcae36c87">
+      <driver-ref>h2.unified</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.h2.Driver</jdbc-driver>
+      <jdbc-url>jdbc:h2:file:C:/Temp/db/configuration</jdbc-url>
+    </data-source>
+  </component>
+</project>
