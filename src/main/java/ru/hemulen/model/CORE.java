@@ -31,20 +31,29 @@ public class CORE {
 
     public void fillTempTables() throws SQLException {
         String sql = "INSERT INTO CORE.REQ_TMP\n" +
-                "SELECT DISTINCT RESP.REFERENCE_ID\n" +
-                "FROM CORE.MESSAGE_METADATA RESP\n" +
-                "  LEFT JOIN CORE.MESSAGE_CONTENT MC_RESP ON RESP.ID = MC_RESP.ID\n" +
-                "WHERE RESP.MESSAGE_TYPE = 'RESPONSE'\n" +
-                "  AND RESP.REFERENCE_ID IS NOT NULL\n" +
-                "  AND RESP.CREATION_DATE <= '" + threshold + "'\n" +
-                "  AND MC_RESP.MODE <> 'STATUS';";
+                "SELECT DISTINCT MM.REFERENCE_ID\n" +
+                "FROM CORE.MESSAGE_METADATA MM\n" +
+                "  LEFT JOIN CORE.MESSAGE_CONTENT MC ON MM.ID = MC.ID\n" +
+                "WHERE MM.MESSAGE_TYPE = 'RESPONSE'\n" +
+                "  AND MM.REFERENCE_ID IS NOT NULL\n" +
+                "  AND MM.CREATION_DATE <= '" + threshold + "'\n" +
+                "  AND MC.MODE <> 'STATUS';\n" +
+                "COMMIT;";
         statement.executeUpdate(sql);
         sql = "INSERT INTO CORE.RESP_TMP\n" +
                 "SELECT ID\n" +
                 "FROM CORE.MESSAGE_METADATA\n" +
                 "WHERE REFERENCE_ID IN (\n" +
                 "    SELECT ID FROM CORE.REQ_TMP\n" +
-                "    );";
+                "    );\n" +
+                "COMMIT;";
+        statement.executeUpdate(sql);
+        sql = "INSERT INTO CORE.RESP_TMP\n" +
+                "SELECT ID\n" +
+                "FROM CORE.MESSAGE_METADATA\n" +
+                "WHERE MESSAGE_TYPE = 'RESPONSE'\n" +
+                "   AND REFERENCE_ID IS NULL;\n" +
+                "COMMIT;";
         statement.executeUpdate(sql);
     }
 
@@ -53,13 +62,15 @@ public class CORE {
                 "FROM CORE.ATTACHMENT_METADATA\n" +
                 "WHERE MESSAGE_METADATA_ID IN (\n" +
                 "    SELECT ID FROM CORE.RESP_TMP\n" +
-                "    );";
+                "    );\n" +
+                "COMMIT;";
         statement.executeUpdate(sql);
         sql = "DELETE \n" +
                 "FROM CORE.ATTACHMENT_METADATA\n" +
                 "WHERE MESSAGE_METADATA_ID IN (\n" +
                 "    SELECT ID FROM CORE.REQ_TMP\n" +
-                "    );";
+                "    );\n" +
+                "COMMIT;";
         statement.executeUpdate(sql);
     }
 
@@ -68,13 +79,15 @@ public class CORE {
                 "FROM CORE.MESSAGE_CONTENT\n" +
                 "WHERE ID IN (\n" +
                 "    SELECT ID FROM CORE.RESP_TMP\n" +
-                "    );";
+                "    );\n" +
+                "COMMIT;";
         statement.executeUpdate(sql);
         sql = "DELETE\n" +
                 "FROM CORE.MESSAGE_CONTENT\n" +
                 "WHERE ID IN (\n" +
                 "    SELECT ID FROM CORE.REQ_TMP\n" +
-                "    );";
+                "    );" +
+                "COMMIT;";
         statement.executeUpdate(sql);
     }
 
@@ -83,14 +96,18 @@ public class CORE {
                 "FROM CORE.MESSAGE_METADATA\n" +
                 "WHERE ID IN (\n" +
                 "    SELECT ID FROM CORE.RESP_TMP\n" +
-                "    );";
+                "    );\n" +
+                "COMMIT;";
         statement.executeUpdate(sql);
+        checkpoint();
         sql = "DELETE\n" +
                 "FROM CORE.MESSAGE_METADATA\n" +
                 "WHERE ID IN (\n" +
                 "    SELECT ID FROM CORE.REQ_TMP\n" +
-                "    );";
+                "    );\n" +
+                "COMMIT;";
         statement.executeUpdate(sql);
+        checkpoint();
     }
 
     public void deleteMessageState() throws SQLException {
@@ -98,14 +115,32 @@ public class CORE {
                 "FROM CORE.MESSAGE_STATE\n" +
                 "WHERE ID IN (\n" +
                 "    SELECT ID FROM CORE.RESP_TMP\n" +
-                "    );";
+                "    );\n" +
+                "COMMIT;";
         statement.executeUpdate(sql);
         sql = "DELETE\n" +
                 "FROM CORE.MESSAGE_STATE\n" +
                 "WHERE ID IN (\n" +
                 "    SELECT ID FROM CORE.REQ_TMP\n" +
-                "    );";
+                "    );\n" +
+                "COMMIT;";
         statement.executeUpdate(sql);
     }
 
+    public void close() {
+        // База данных закрывается с очисткой всех пустых областей файла базы данных
+        try {
+            String sql = "SHUTDOWN DEFRAG;";
+            statement.executeUpdate(sql);
+        } catch (SQLException e) {
+            // Здесь появится сообщение "База данных уже закрыта (чтобы отключить автоматическое закрытие
+            // базы данных при останове JVM, добавьте ";DB_CLOSE_ON_EXIT=FALSE" в URL)"
+            // Ничего не делаем
+        }
+    }
+
+    private void checkpoint() throws SQLException {
+        String sql = "CHECKPOINT SYNC;";
+        statement.execute(sql);
+    }
 }

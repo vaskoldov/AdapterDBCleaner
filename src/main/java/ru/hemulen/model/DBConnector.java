@@ -6,7 +6,6 @@ import org.slf4j.LoggerFactory;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 /**
  * Класс содержит подключение к базе данных и объекты для манипулирования с данными в схемах CORE и UI
@@ -18,7 +17,7 @@ public class DBConnector {
     private UI ui;
 
     public DBConnector(String dbName, String user, String pass, boolean isUIPresent, String threshold) throws SQLException {
-        String url = String.format("jdbc:h2:file:%s;IFEXISTS=TRUE;AUTO_SERVER=TRUE", dbName);
+        String url = String.format("jdbc:h2:file:%s;IFEXISTS=TRUE;AUTO_SERVER=TRUE;WRITE_DELAY=0", dbName);
         try {
             Class.forName("org.h2.Driver");
             connection = DriverManager.getConnection(url, user, pass);
@@ -38,12 +37,8 @@ public class DBConnector {
     }
 
     public void close() {
-        try {
-            connection.close();
-        } catch (SQLException e) {
-            LOG.error("Не удалось закрыть подключение к базе данных.");
-            LOG.error(e.getMessage());
-        }
+        core.close();
+        // Метод close схимает и закрывает базу данных, поэтому вызывать такой же метод для ui уже не нужно.
     }
 
     public CORE getCore() {

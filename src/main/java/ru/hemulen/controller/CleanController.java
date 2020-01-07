@@ -21,21 +21,26 @@ public class CleanController {
     private DBConnector source;
     private boolean isUIPresent;
 
-    public CleanController(Properties props) {
+    public CleanController(Properties props, String threshold) {
         String dbName = props.getProperty("DB_PATH");
         String user = props.getProperty("USER");
         String pass = props.getProperty("PASS");
         isUIPresent = Boolean.parseBoolean(props.getProperty("IS_UI_PRESENT"));
-        // Вычисляем штамп времени, после которого данные останутся в базе:
-        // - получаем текущее время
-        Calendar currentTime = new GregorianCalendar();
-        // - считываем глубину очистки (в минутах) из конфигурационного файла
-        int depth = Integer.parseInt(props.getProperty("ARCHIVE_DEPTH"));
-        // - вычитаем глубину очистки из текущего времени
-        currentTime.add(GregorianCalendar.MINUTE, -depth);
-        // - преобразуем в SQL-формат даты
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
-        String threshold = df.format(currentTime.getTimeInMillis());
+        if (threshold.isEmpty()) {
+            // Если конкретная дата не передана в параметре, то
+            // вычисляем штамп времени, после которого данные останутся в базе:
+            // - получаем текущее время
+            Calendar currentTime = new GregorianCalendar();
+            // - считываем глубину очистки (в минутах) из конфигурационного файла
+            int depth = Integer.parseInt(props.getProperty("ARCHIVE_DEPTH"));
+            // - вычитаем глубину очистки из текущего времени
+            currentTime.add(GregorianCalendar.MINUTE, -depth);
+            // - преобразуем в SQL-формат даты
+            DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
+            threshold = df.format(currentTime.getTimeInMillis());
+        } else {
+            threshold = threshold + " 00:00:00";
+        }
         // Создаем объект для работы с базой данных
         try {
             source = new DBConnector(dbName, user, pass, isUIPresent, threshold);

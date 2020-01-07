@@ -210,3 +210,307 @@ WHERE ID IN (
 2020-01-05 22:00:51 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы MESSAGE_STATE.
 2020-01-05 22:00:51 [main] INFO  ru.hemulen.controller.CleanController - Временные таблицы удалены.
 2020-01-05 22:00:51 [main] INFO  ru.hemulen.controller.CleanController - Очистка схемы CORE завершена.
+2020-01-06 11:26:52 [main] INFO  ru.hemulen.controller.CleanController - Начало очистки схемы CORE.
+2020-01-06 11:26:52 [main] INFO  ru.hemulen.controller.CleanController - Созданы временные таблицы.
+2020-01-06 11:27:07 [main] INFO  ru.hemulen.controller.CleanController - Временные таблицы заполнены идентификаторами удаляемых записей.
+2020-01-06 11:27:08 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы ATTACHMENT_METADATA.
+2020-01-06 11:27:08 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы MESSAGE_CONTENT.
+2020-01-06 11:27:08 [main] ERROR ru.hemulen.controller.CleanController - Произошла ошибка при обработке данных в схеме CORE.
+2020-01-06 11:27:08 [main] ERROR ru.hemulen.controller.CleanController - Нарушение ссылочной целостности: "MESSAGE_METADATA_REFERENCE_ID_TO_MESSAGE_METADATA_ID_FK: CORE.MESSAGE_METADATA FOREIGN KEY(REFERENCE_ID) REFERENCES CORE.MESSAGE_METADATA(ID) ('8046c277-94a7-4282-bab7-e2b0504cc2e4')"
+Referential integrity constraint violation: "MESSAGE_METADATA_REFERENCE_ID_TO_MESSAGE_METADATA_ID_FK: CORE.MESSAGE_METADATA FOREIGN KEY(REFERENCE_ID) REFERENCES CORE.MESSAGE_METADATA(ID) ('8046c277-94a7-4282-bab7-e2b0504cc2e4')"; SQL statement:
+DELETE
+FROM CORE.MESSAGE_METADATA
+WHERE ID IN (
+    SELECT ID FROM CORE.RESP_TMP
+    ); [23503-199]
+2020-01-06 11:34:25 [main] INFO  ru.hemulen.controller.CleanController - Начало очистки схемы CORE.
+2020-01-06 11:34:25 [main] INFO  ru.hemulen.controller.CleanController - Созданы временные таблицы.
+2020-01-06 11:34:37 [main] INFO  ru.hemulen.controller.CleanController - Временные таблицы заполнены идентификаторами удаляемых записей.
+2020-01-06 11:34:37 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы ATTACHMENT_METADATA.
+2020-01-06 11:34:37 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы MESSAGE_CONTENT.
+2020-01-06 11:34:38 [main] ERROR ru.hemulen.controller.CleanController - Произошла ошибка при обработке данных в схеме CORE.
+2020-01-06 11:34:38 [main] ERROR ru.hemulen.controller.CleanController - Нарушение ссылочной целостности: "MESSAGE_METADATA_REFERENCE_ID_TO_MESSAGE_METADATA_ID_FK: CORE.MESSAGE_METADATA FOREIGN KEY(REFERENCE_ID) REFERENCES CORE.MESSAGE_METADATA(ID) ('8004fc51-d677-4cdf-9b6e-d4d40ec61b32')"
+Referential integrity constraint violation: "MESSAGE_METADATA_REFERENCE_ID_TO_MESSAGE_METADATA_ID_FK: CORE.MESSAGE_METADATA FOREIGN KEY(REFERENCE_ID) REFERENCES CORE.MESSAGE_METADATA(ID) ('8004fc51-d677-4cdf-9b6e-d4d40ec61b32')"; SQL statement:
+DELETE
+FROM CORE.MESSAGE_METADATA
+WHERE ID IN (
+    SELECT ID FROM CORE.RESP_TMP
+    ); [23503-199]
+2020-01-06 11:40:32 [main] INFO  ru.hemulen.controller.CleanController - Начало очистки схемы CORE.
+2020-01-06 11:40:32 [main] INFO  ru.hemulen.controller.CleanController - Созданы временные таблицы.
+2020-01-06 11:40:47 [main] INFO  ru.hemulen.controller.CleanController - Временные таблицы заполнены идентификаторами удаляемых записей.
+2020-01-06 11:40:47 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы ATTACHMENT_METADATA.
+2020-01-06 11:40:47 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы MESSAGE_CONTENT.
+2020-01-06 11:40:47 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы MESSAGE_METADATA.
+2020-01-06 11:40:47 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы MESSAGE_STATE.
+2020-01-06 11:40:47 [main] INFO  ru.hemulen.controller.CleanController - Временные таблицы удалены.
+2020-01-06 11:40:47 [main] INFO  ru.hemulen.controller.CleanController - Очистка схемы CORE завершена.
+2020-01-06 11:41:30 [main] ERROR ru.hemulen.model.DBConnector - Не удалось подключиться к базе C:\Temp\db\adapter.
+2020-01-06 11:41:30 [main] ERROR ru.hemulen.model.DBConnector - Соединение разорвано: "java.net.SocketTimeoutException: connect timed out: 192.168.71.1:53998"
+Connection is broken: "java.net.SocketTimeoutException: connect timed out: 192.168.71.1:53998" [90067-199]
+2020-01-06 11:42:23 [main] INFO  ru.hemulen.controller.CleanController - Начало очистки схемы CORE.
+2020-01-06 11:42:23 [main] INFO  ru.hemulen.controller.CleanController - Созданы временные таблицы.
+2020-01-06 11:43:17 [main] INFO  ru.hemulen.controller.CleanController - Временные таблицы заполнены идентификаторами удаляемых записей.
+2020-01-06 11:43:22 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы ATTACHMENT_METADATA.
+2020-01-06 11:45:54 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы MESSAGE_CONTENT.
+2020-01-06 11:50:04 [main] ERROR ru.hemulen.controller.CleanController - Произошла ошибка при обработке данных в схеме CORE.
+2020-01-06 11:50:04 [main] ERROR ru.hemulen.controller.CleanController - Нарушение ссылочной целостности: "MESSAGE_METADATA_REFERENCE_ID_TO_MESSAGE_METADATA_ID_FK: CORE.MESSAGE_METADATA FOREIGN KEY(REFERENCE_ID) REFERENCES CORE.MESSAGE_METADATA(ID) ('8000eb8e-02d4-47da-af41-5ba4665f8ba3')"
+Referential integrity constraint violation: "MESSAGE_METADATA_REFERENCE_ID_TO_MESSAGE_METADATA_ID_FK: CORE.MESSAGE_METADATA FOREIGN KEY(REFERENCE_ID) REFERENCES CORE.MESSAGE_METADATA(ID) ('8000eb8e-02d4-47da-af41-5ba4665f8ba3')"; SQL statement:
+DELETE
+FROM CORE.MESSAGE_METADATA
+WHERE ID IN (
+    SELECT ID FROM CORE.RESP_TMP
+    ); [23503-199]
+2020-01-06 12:32:31 [main] INFO  ru.hemulen.controller.CleanController - Начало очистки схемы CORE.
+2020-01-06 12:32:31 [main] INFO  ru.hemulen.controller.CleanController - Созданы временные таблицы.
+2020-01-06 12:32:45 [main] INFO  ru.hemulen.controller.CleanController - Временные таблицы заполнены идентификаторами удаляемых записей.
+2020-01-06 12:32:45 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы ATTACHMENT_METADATA.
+2020-01-06 12:32:45 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы MESSAGE_CONTENT.
+2020-01-06 12:32:45 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы MESSAGE_METADATA.
+2020-01-06 12:32:45 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы MESSAGE_STATE.
+2020-01-06 12:32:45 [main] INFO  ru.hemulen.controller.CleanController - Временные таблицы удалены.
+2020-01-06 12:32:45 [main] INFO  ru.hemulen.controller.CleanController - Очистка схемы CORE завершена.
+2020-01-06 12:42:44 [main] INFO  ru.hemulen.controller.CleanController - Начало очистки схемы CORE.
+2020-01-06 12:42:44 [main] INFO  ru.hemulen.controller.CleanController - Созданы временные таблицы.
+2020-01-06 12:42:55 [main] INFO  ru.hemulen.controller.CleanController - Временные таблицы заполнены идентификаторами удаляемых записей.
+2020-01-06 12:42:55 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы ATTACHMENT_METADATA.
+2020-01-06 12:42:55 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы MESSAGE_CONTENT.
+2020-01-06 12:42:55 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы MESSAGE_METADATA.
+2020-01-06 12:42:55 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы MESSAGE_STATE.
+2020-01-06 12:42:55 [main] INFO  ru.hemulen.controller.CleanController - Временные таблицы удалены.
+2020-01-06 12:42:55 [main] INFO  ru.hemulen.controller.CleanController - Очистка схемы CORE завершена.
+2020-01-06 12:59:01 [main] INFO  ru.hemulen.controller.CleanController - Начало очистки схемы CORE.
+2020-01-06 12:59:01 [main] INFO  ru.hemulen.controller.CleanController - Созданы временные таблицы.
+2020-01-06 12:59:12 [main] INFO  ru.hemulen.controller.CleanController - Временные таблицы заполнены идентификаторами удаляемых записей.
+2020-01-06 12:59:12 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы ATTACHMENT_METADATA.
+2020-01-06 12:59:12 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы MESSAGE_CONTENT.
+2020-01-06 12:59:12 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы MESSAGE_METADATA.
+2020-01-06 12:59:12 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы MESSAGE_STATE.
+2020-01-06 12:59:12 [main] INFO  ru.hemulen.controller.CleanController - Временные таблицы удалены.
+2020-01-06 12:59:12 [main] INFO  ru.hemulen.controller.CleanController - Очистка схемы CORE завершена.
+2020-01-06 13:01:34 [main] INFO  ru.hemulen.controller.CleanController - Начало очистки схемы CORE.
+2020-01-06 13:01:34 [main] INFO  ru.hemulen.controller.CleanController - Созданы временные таблицы.
+2020-01-06 13:01:46 [main] INFO  ru.hemulen.controller.CleanController - Временные таблицы заполнены идентификаторами удаляемых записей.
+2020-01-06 13:01:46 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы ATTACHMENT_METADATA.
+2020-01-06 13:01:46 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы MESSAGE_CONTENT.
+2020-01-06 13:01:46 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы MESSAGE_METADATA.
+2020-01-06 13:01:46 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы MESSAGE_STATE.
+2020-01-06 13:01:46 [main] INFO  ru.hemulen.controller.CleanController - Временные таблицы удалены.
+2020-01-06 13:01:46 [main] INFO  ru.hemulen.controller.CleanController - Очистка схемы CORE завершена.
+2020-01-06 13:07:54 [main] INFO  ru.hemulen.controller.CleanController - Начало очистки схемы CORE.
+2020-01-06 13:07:54 [main] INFO  ru.hemulen.controller.CleanController - Созданы временные таблицы.
+2020-01-06 13:08:11 [main] INFO  ru.hemulen.controller.CleanController - Временные таблицы заполнены идентификаторами удаляемых записей.
+2020-01-06 13:08:11 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы ATTACHMENT_METADATA.
+2020-01-06 13:08:11 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы MESSAGE_CONTENT.
+2020-01-06 13:08:11 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы MESSAGE_METADATA.
+2020-01-06 13:08:11 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы MESSAGE_STATE.
+2020-01-06 13:08:11 [main] INFO  ru.hemulen.controller.CleanController - Временные таблицы удалены.
+2020-01-06 13:08:11 [main] INFO  ru.hemulen.controller.CleanController - Очистка схемы CORE завершена.
+2020-01-06 15:39:57 [main] INFO  ru.hemulen.controller.CleanController - Начало очистки схемы CORE.
+2020-01-06 15:39:57 [main] INFO  ru.hemulen.controller.CleanController - Созданы временные таблицы.
+2020-01-06 15:40:52 [main] INFO  ru.hemulen.controller.CleanController - Временные таблицы заполнены идентификаторами удаляемых записей.
+2020-01-06 15:40:53 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы ATTACHMENT_METADATA.
+2020-01-06 15:42:31 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы MESSAGE_CONTENT.
+2020-01-06 15:45:22 [main] ERROR ru.hemulen.controller.CleanController - Произошла ошибка при обработке данных в схеме CORE.
+2020-01-06 15:45:22 [main] ERROR ru.hemulen.controller.CleanController - Нарушение ссылочной целостности: "MESSAGE_METADATA_REFERENCE_ID_TO_MESSAGE_METADATA_ID_FK: CORE.MESSAGE_METADATA FOREIGN KEY(REFERENCE_ID) REFERENCES CORE.MESSAGE_METADATA(ID) ('8006445d-eb50-4b51-9ed6-bd1c6301e061')"
+Referential integrity constraint violation: "MESSAGE_METADATA_REFERENCE_ID_TO_MESSAGE_METADATA_ID_FK: CORE.MESSAGE_METADATA FOREIGN KEY(REFERENCE_ID) REFERENCES CORE.MESSAGE_METADATA(ID) ('8006445d-eb50-4b51-9ed6-bd1c6301e061')"; SQL statement:
+DELETE
+FROM CORE.MESSAGE_METADATA
+WHERE ID IN (
+    SELECT ID FROM CORE.RESP_TMP
+    ); [23503-199]
+2020-01-06 22:15:28 [main] INFO  ru.hemulen.controller.CleanController - Начало очистки схемы CORE.
+2020-01-06 22:15:28 [main] INFO  ru.hemulen.controller.CleanController - Созданы временные таблицы.
+2020-01-06 22:15:28 [main] ERROR ru.hemulen.controller.CleanController - Произошла ошибка при обработке данных в схеме CORE.
+2020-01-06 22:15:28 [main] ERROR ru.hemulen.controller.CleanController - Столбец "RESP.REFERENCE_ID" не найден
+Column "RESP.REFERENCE_ID" not found; SQL statement:
+INSERT INTO CORE.REQ_TMP
+SELECT DISTINCT RESP.REFERENCE_ID
+FROM CORE.MESSAGE_METADATA MM
+  LEFT JOIN CORE.MESSAGE_CONTENT MC ON MM.ID = MC.ID
+WHERE MM.MESSAGE_TYPE = 'RESPONSE'
+  AND MM.REFERENCE_ID IS NOT NULL
+  AND MM.CREATION_DATE <= '2020-01-01 00:00:00'
+  AND MC.MODE <> 'STATUS'; [42122-199]
+2020-01-06 22:19:59 [main] INFO  ru.hemulen.controller.CleanController - Начало очистки схемы CORE.
+2020-01-06 22:20:02 [main] INFO  ru.hemulen.controller.CleanController - Созданы временные таблицы.
+2020-01-06 22:20:16 [main] ERROR ru.hemulen.controller.CleanController - Произошла ошибка при обработке данных в схеме CORE.
+2020-01-06 22:21:35 [main] ERROR ru.hemulen.controller.CleanController - Столбец "RESP.REFERENCE_ID" не найден
+Column "RESP.REFERENCE_ID" not found; SQL statement:
+INSERT INTO CORE.REQ_TMP
+SELECT DISTINCT RESP.REFERENCE_ID
+FROM CORE.MESSAGE_METADATA MM
+  LEFT JOIN CORE.MESSAGE_CONTENT MC ON MM.ID = MC.ID
+WHERE MM.MESSAGE_TYPE = 'RESPONSE'
+  AND MM.REFERENCE_ID IS NOT NULL
+  AND MM.CREATION_DATE <= '2019-04-01 00:00:00'
+  AND MC.MODE <> 'STATUS'; [42122-199]
+2020-01-06 22:22:42 [main] INFO  ru.hemulen.controller.CleanController - Начало очистки схемы CORE.
+2020-01-06 22:22:57 [main] INFO  ru.hemulen.controller.CleanController - Созданы временные таблицы.
+2020-01-06 22:33:06 [main] INFO  ru.hemulen.controller.CleanController - Начало очистки схемы CORE.
+2020-01-06 22:33:06 [main] INFO  ru.hemulen.controller.CleanController - Созданы временные таблицы.
+2020-01-06 22:33:21 [main] INFO  ru.hemulen.controller.CleanController - Временные таблицы заполнены идентификаторами удаляемых записей.
+2020-01-06 22:33:21 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы ATTACHMENT_METADATA.
+2020-01-06 22:33:21 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы MESSAGE_CONTENT.
+2020-01-06 22:33:22 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы MESSAGE_METADATA.
+2020-01-06 22:33:22 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы MESSAGE_STATE.
+2020-01-06 22:33:22 [main] INFO  ru.hemulen.controller.CleanController - Временные таблицы удалены.
+2020-01-06 22:33:22 [main] INFO  ru.hemulen.controller.CleanController - Очистка схемы CORE завершена.
+2020-01-06 22:41:25 [main] INFO  ru.hemulen.controller.CleanController - Начало очистки схемы CORE.
+2020-01-06 22:41:25 [main] INFO  ru.hemulen.controller.CleanController - Созданы временные таблицы.
+2020-01-06 22:41:49 [main] INFO  ru.hemulen.controller.CleanController - Временные таблицы заполнены идентификаторами удаляемых записей.
+2020-01-06 22:41:49 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы ATTACHMENT_METADATA.
+2020-01-06 22:41:50 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы MESSAGE_CONTENT.
+2020-01-06 22:41:50 [main] ERROR ru.hemulen.controller.CleanController - Произошла ошибка при обработке данных в схеме CORE.
+2020-01-06 22:41:50 [main] ERROR ru.hemulen.controller.CleanController - Нарушение ссылочной целостности: "MESSAGE_METADATA_REFERENCE_ID_TO_MESSAGE_METADATA_ID_FK: CORE.MESSAGE_METADATA FOREIGN KEY(REFERENCE_ID) REFERENCES CORE.MESSAGE_METADATA(ID) ('e2684833-056f-43b9-b1c2-1460a416b018')"
+Referential integrity constraint violation: "MESSAGE_METADATA_REFERENCE_ID_TO_MESSAGE_METADATA_ID_FK: CORE.MESSAGE_METADATA FOREIGN KEY(REFERENCE_ID) REFERENCES CORE.MESSAGE_METADATA(ID) ('e2684833-056f-43b9-b1c2-1460a416b018')"; SQL statement:
+DELETE
+FROM CORE.MESSAGE_METADATA
+WHERE ID IN (
+    SELECT ID FROM CORE.RESP_TMP
+    ); [23503-199]
+2020-01-06 22:48:15 [main] INFO  ru.hemulen.controller.CleanController - Начало очистки схемы CORE.
+2020-01-06 22:48:15 [main] INFO  ru.hemulen.controller.CleanController - Созданы временные таблицы.
+2020-01-06 22:48:33 [main] INFO  ru.hemulen.controller.CleanController - Временные таблицы заполнены идентификаторами удаляемых записей.
+2020-01-06 22:48:33 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы ATTACHMENT_METADATA.
+2020-01-06 22:48:33 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы MESSAGE_CONTENT.
+2020-01-06 22:48:33 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы MESSAGE_METADATA.
+2020-01-06 22:48:33 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы MESSAGE_STATE.
+2020-01-06 22:48:34 [main] INFO  ru.hemulen.controller.CleanController - Временные таблицы удалены.
+2020-01-06 22:48:34 [main] INFO  ru.hemulen.controller.CleanController - Очистка схемы CORE завершена.
+2020-01-06 22:52:58 [main] INFO  ru.hemulen.controller.CleanController - Начало очистки схемы CORE.
+2020-01-06 22:52:58 [main] INFO  ru.hemulen.controller.CleanController - Созданы временные таблицы.
+2020-01-06 22:53:17 [main] INFO  ru.hemulen.controller.CleanController - Временные таблицы заполнены идентификаторами удаляемых записей.
+2020-01-06 22:53:17 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы ATTACHMENT_METADATA.
+2020-01-06 22:53:17 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы MESSAGE_CONTENT.
+2020-01-06 22:53:17 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы MESSAGE_METADATA.
+2020-01-06 22:53:17 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы MESSAGE_STATE.
+2020-01-06 22:53:17 [main] INFO  ru.hemulen.controller.CleanController - Временные таблицы удалены.
+2020-01-06 22:53:17 [main] INFO  ru.hemulen.controller.CleanController - Очистка схемы CORE завершена.
+2020-01-06 22:56:46 [main] INFO  ru.hemulen.controller.CleanController - Начало очистки схемы CORE.
+2020-01-06 22:56:46 [main] INFO  ru.hemulen.controller.CleanController - Созданы временные таблицы.
+2020-01-06 22:57:11 [main] INFO  ru.hemulen.controller.CleanController - Временные таблицы заполнены идентификаторами удаляемых записей.
+2020-01-06 22:57:11 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы ATTACHMENT_METADATA.
+2020-01-06 22:57:15 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы MESSAGE_CONTENT.
+2020-01-06 22:57:16 [main] ERROR ru.hemulen.controller.CleanController - Произошла ошибка при обработке данных в схеме CORE.
+2020-01-06 22:57:16 [main] ERROR ru.hemulen.controller.CleanController - Нарушение ссылочной целостности: "MESSAGE_METADATA_REFERENCE_ID_TO_MESSAGE_METADATA_ID_FK: CORE.MESSAGE_METADATA FOREIGN KEY(REFERENCE_ID) REFERENCES CORE.MESSAGE_METADATA(ID) ('ade01488-188f-48c4-b711-3cc7f44a15fa')"
+Referential integrity constraint violation: "MESSAGE_METADATA_REFERENCE_ID_TO_MESSAGE_METADATA_ID_FK: CORE.MESSAGE_METADATA FOREIGN KEY(REFERENCE_ID) REFERENCES CORE.MESSAGE_METADATA(ID) ('ade01488-188f-48c4-b711-3cc7f44a15fa')"; SQL statement:
+DELETE
+FROM CORE.MESSAGE_METADATA
+WHERE ID IN (
+    SELECT ID FROM CORE.RESP_TMP
+    );
+COMMIT; [23503-199]
+2020-01-06 22:57:42 [main] ERROR ru.hemulen.model.DBConnector - Не удалось подключиться к базе C:\Temp\db\adapter.
+2020-01-06 22:57:42 [main] ERROR ru.hemulen.model.DBConnector - Соединение разорвано: "java.net.SocketTimeoutException: connect timed out: 192.168.71.1:58694"
+Connection is broken: "java.net.SocketTimeoutException: connect timed out: 192.168.71.1:58694" [90067-199]
+2020-01-06 22:58:26 [main] INFO  ru.hemulen.controller.CleanController - Начало очистки схемы CORE.
+2020-01-06 22:58:26 [main] INFO  ru.hemulen.controller.CleanController - Созданы временные таблицы.
+2020-01-06 22:58:44 [main] INFO  ru.hemulen.controller.CleanController - Временные таблицы заполнены идентификаторами удаляемых записей.
+2020-01-06 22:58:44 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы ATTACHMENT_METADATA.
+2020-01-06 22:58:44 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы MESSAGE_CONTENT.
+2020-01-06 22:58:44 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы MESSAGE_METADATA.
+2020-01-06 22:58:44 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы MESSAGE_STATE.
+2020-01-06 22:58:44 [main] INFO  ru.hemulen.controller.CleanController - Временные таблицы удалены.
+2020-01-06 22:58:44 [main] INFO  ru.hemulen.controller.CleanController - Очистка схемы CORE завершена.
+2020-01-06 23:05:12 [main] INFO  ru.hemulen.controller.CleanController - Начало очистки схемы CORE.
+2020-01-06 23:05:12 [main] INFO  ru.hemulen.controller.CleanController - Созданы временные таблицы.
+2020-01-06 23:05:37 [main] INFO  ru.hemulen.controller.CleanController - Временные таблицы заполнены идентификаторами удаляемых записей.
+2020-01-06 23:05:37 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы ATTACHMENT_METADATA.
+2020-01-06 23:05:41 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы MESSAGE_CONTENT.
+2020-01-06 23:05:43 [main] ERROR ru.hemulen.controller.CleanController - Произошла ошибка при обработке данных в схеме CORE.
+2020-01-06 23:05:43 [main] ERROR ru.hemulen.controller.CleanController - Нарушение ссылочной целостности: "MESSAGE_METADATA_REFERENCE_ID_TO_MESSAGE_METADATA_ID_FK: CORE.MESSAGE_METADATA FOREIGN KEY(REFERENCE_ID) REFERENCES CORE.MESSAGE_METADATA(ID) ('2ca31ea6-84bc-41e6-b0d8-e454d68a0e64')"
+Referential integrity constraint violation: "MESSAGE_METADATA_REFERENCE_ID_TO_MESSAGE_METADATA_ID_FK: CORE.MESSAGE_METADATA FOREIGN KEY(REFERENCE_ID) REFERENCES CORE.MESSAGE_METADATA(ID) ('2ca31ea6-84bc-41e6-b0d8-e454d68a0e64')"; SQL statement:
+DELETE
+FROM CORE.MESSAGE_METADATA
+WHERE ID IN (
+    SELECT ID FROM CORE.RESP_TMP
+    );
+COMMIT; [23503-199]
+2020-01-06 23:06:03 [main] ERROR ru.hemulen.model.DBConnector - Не удалось подключиться к базе C:\Temp\db\adapter.
+2020-01-06 23:06:03 [main] ERROR ru.hemulen.model.DBConnector - Соединение разорвано: "java.net.SocketTimeoutException: connect timed out: 192.168.71.1:58920"
+Connection is broken: "java.net.SocketTimeoutException: connect timed out: 192.168.71.1:58920" [90067-199]
+2020-01-06 23:06:16 [main] ERROR ru.hemulen.model.DBConnector - Не удалось подключиться к базе C:\Temp\db\adapter.
+2020-01-06 23:06:16 [main] ERROR ru.hemulen.model.DBConnector - Соединение разорвано: "java.net.SocketTimeoutException: connect timed out: 192.168.71.1:58920"
+Connection is broken: "java.net.SocketTimeoutException: connect timed out: 192.168.71.1:58920" [90067-199]
+2020-01-06 23:06:55 [main] INFO  ru.hemulen.controller.CleanController - Начало очистки схемы CORE.
+2020-01-06 23:06:55 [main] INFO  ru.hemulen.controller.CleanController - Созданы временные таблицы.
+2020-01-06 23:07:13 [main] INFO  ru.hemulen.controller.CleanController - Временные таблицы заполнены идентификаторами удаляемых записей.
+2020-01-06 23:07:13 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы ATTACHMENT_METADATA.
+2020-01-06 23:07:13 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы MESSAGE_CONTENT.
+2020-01-06 23:07:13 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы MESSAGE_METADATA.
+2020-01-06 23:07:13 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы MESSAGE_STATE.
+2020-01-06 23:07:13 [main] INFO  ru.hemulen.controller.CleanController - Временные таблицы удалены.
+2020-01-06 23:07:13 [main] INFO  ru.hemulen.controller.CleanController - Очистка схемы CORE завершена.
+2020-01-06 23:12:19 [main] INFO  ru.hemulen.controller.CleanController - Начало очистки схемы CORE.
+2020-01-06 23:12:19 [main] INFO  ru.hemulen.controller.CleanController - Созданы временные таблицы.
+2020-01-06 23:12:34 [main] INFO  ru.hemulen.controller.CleanController - Временные таблицы заполнены идентификаторами удаляемых записей.
+2020-01-06 23:12:35 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы ATTACHMENT_METADATA.
+2020-01-06 23:12:35 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы MESSAGE_CONTENT.
+2020-01-06 23:12:36 [main] ERROR ru.hemulen.controller.CleanController - Произошла ошибка при обработке данных в схеме CORE.
+2020-01-06 23:12:36 [main] ERROR ru.hemulen.controller.CleanController - Нарушение ссылочной целостности: "MESSAGE_METADATA_REFERENCE_ID_TO_MESSAGE_METADATA_ID_FK: CORE.MESSAGE_METADATA FOREIGN KEY(REFERENCE_ID) REFERENCES CORE.MESSAGE_METADATA(ID) ('80383d49-c8cd-4d6d-afda-b00e1de2114d')"
+Referential integrity constraint violation: "MESSAGE_METADATA_REFERENCE_ID_TO_MESSAGE_METADATA_ID_FK: CORE.MESSAGE_METADATA FOREIGN KEY(REFERENCE_ID) REFERENCES CORE.MESSAGE_METADATA(ID) ('80383d49-c8cd-4d6d-afda-b00e1de2114d')"; SQL statement:
+DELETE
+FROM CORE.MESSAGE_METADATA
+WHERE ID IN (
+    SELECT ID FROM CORE.RESP_TMP
+    ); [23503-199]
+2020-01-06 23:15:53 [main] INFO  ru.hemulen.controller.CleanController - Начало очистки схемы CORE.
+2020-01-06 23:15:53 [main] INFO  ru.hemulen.controller.CleanController - Созданы временные таблицы.
+2020-01-06 23:16:09 [main] INFO  ru.hemulen.controller.CleanController - Временные таблицы заполнены идентификаторами удаляемых записей.
+2020-01-06 23:16:09 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы ATTACHMENT_METADATA.
+2020-01-06 23:16:09 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы MESSAGE_CONTENT.
+2020-01-06 23:16:09 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы MESSAGE_METADATA.
+2020-01-06 23:16:09 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы MESSAGE_STATE.
+2020-01-06 23:16:09 [main] INFO  ru.hemulen.controller.CleanController - Временные таблицы удалены.
+2020-01-06 23:16:09 [main] INFO  ru.hemulen.controller.CleanController - Очистка схемы CORE завершена.
+2020-01-06 23:18:58 [main] INFO  ru.hemulen.controller.CleanController - Начало очистки схемы CORE.
+2020-01-06 23:18:58 [main] INFO  ru.hemulen.controller.CleanController - Созданы временные таблицы.
+2020-01-06 23:19:14 [main] INFO  ru.hemulen.controller.CleanController - Временные таблицы заполнены идентификаторами удаляемых записей.
+2020-01-06 23:19:15 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы ATTACHMENT_METADATA.
+2020-01-06 23:19:17 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы MESSAGE_CONTENT.
+2020-01-06 23:19:22 [main] ERROR ru.hemulen.controller.CleanController - Произошла ошибка при обработке данных в схеме CORE.
+2020-01-06 23:19:22 [main] ERROR ru.hemulen.controller.CleanController - Нарушение ссылочной целостности: "MESSAGE_METADATA_REFERENCE_ID_TO_MESSAGE_METADATA_ID_FK: CORE.MESSAGE_METADATA FOREIGN KEY(REFERENCE_ID) REFERENCES CORE.MESSAGE_METADATA(ID) ('8004aefd-a4ea-4e26-bc8f-b0554e536b45')"
+Referential integrity constraint violation: "MESSAGE_METADATA_REFERENCE_ID_TO_MESSAGE_METADATA_ID_FK: CORE.MESSAGE_METADATA FOREIGN KEY(REFERENCE_ID) REFERENCES CORE.MESSAGE_METADATA(ID) ('8004aefd-a4ea-4e26-bc8f-b0554e536b45')"; SQL statement:
+DELETE
+FROM CORE.MESSAGE_METADATA
+WHERE ID IN (
+    SELECT ID FROM CORE.RESP_TMP
+    ); [23503-199]
+2020-01-06 23:25:32 [main] ERROR ru.hemulen.model.DBConnector - Не удалось подключиться к базе C:\Temp\db\adapter.
+2020-01-06 23:25:32 [main] ERROR ru.hemulen.model.DBConnector - Соединение разорвано: "java.net.SocketTimeoutException: connect timed out: 192.168.71.1:59231"
+Connection is broken: "java.net.SocketTimeoutException: connect timed out: 192.168.71.1:59231" [90067-199]
+2020-01-06 23:25:50 [main] ERROR ru.hemulen.model.DBConnector - Не удалось подключиться к базе C:\Temp\db\adapter.
+2020-01-06 23:25:50 [main] ERROR ru.hemulen.model.DBConnector - Соединение разорвано: "java.net.SocketTimeoutException: connect timed out: 192.168.71.1:59231"
+Connection is broken: "java.net.SocketTimeoutException: connect timed out: 192.168.71.1:59231" [90067-199]
+2020-01-06 23:27:41 [main] INFO  ru.hemulen.controller.CleanController - Начало очистки схемы CORE.
+2020-01-06 23:27:41 [main] INFO  ru.hemulen.controller.CleanController - Созданы временные таблицы.
+2020-01-06 23:27:57 [main] INFO  ru.hemulen.controller.CleanController - Временные таблицы заполнены идентификаторами удаляемых записей.
+2020-01-06 23:27:57 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы ATTACHMENT_METADATA.
+2020-01-06 23:27:57 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы MESSAGE_CONTENT.
+2020-01-06 23:27:57 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы MESSAGE_METADATA.
+2020-01-06 23:27:57 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы MESSAGE_STATE.
+2020-01-06 23:27:57 [main] INFO  ru.hemulen.controller.CleanController - Временные таблицы удалены.
+2020-01-06 23:27:57 [main] INFO  ru.hemulen.controller.CleanController - Очистка схемы CORE завершена.
+2020-01-06 23:32:41 [main] INFO  ru.hemulen.controller.CleanController - Начало очистки схемы CORE.
+2020-01-06 23:32:44 [main] INFO  ru.hemulen.controller.CleanController - Созданы временные таблицы.
+2020-01-06 23:33:06 [main] INFO  ru.hemulen.controller.CleanController - Временные таблицы заполнены идентификаторами удаляемых записей.
+2020-01-06 23:33:08 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы ATTACHMENT_METADATA.
+2020-01-06 23:33:41 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы MESSAGE_CONTENT.
+2020-01-06 23:34:12 [main] ERROR ru.hemulen.controller.CleanController - Произошла ошибка при обработке данных в схеме CORE.
+2020-01-06 23:34:12 [main] ERROR ru.hemulen.controller.CleanController - Нарушение ссылочной целостности: "MESSAGE_METADATA_REFERENCE_ID_TO_MESSAGE_METADATA_ID_FK: CORE.MESSAGE_METADATA FOREIGN KEY(REFERENCE_ID) REFERENCES CORE.MESSAGE_METADATA(ID) ('8000eb8e-02d4-47da-af41-5ba4665f8ba3')"
+Referential integrity constraint violation: "MESSAGE_METADATA_REFERENCE_ID_TO_MESSAGE_METADATA_ID_FK: CORE.MESSAGE_METADATA FOREIGN KEY(REFERENCE_ID) REFERENCES CORE.MESSAGE_METADATA(ID) ('8000eb8e-02d4-47da-af41-5ba4665f8ba3')"; SQL statement:
+DELETE
+FROM CORE.MESSAGE_METADATA
+WHERE ID IN (
+    SELECT ID FROM CORE.RESP_TMP
+    ); [23503-199]
+2020-01-06 23:36:48 [main] INFO  ru.hemulen.controller.CleanController - Начало очистки схемы CORE.
+2020-01-06 23:36:52 [main] INFO  ru.hemulen.controller.CleanController - Созданы временные таблицы.
+2020-01-06 23:37:10 [main] INFO  ru.hemulen.controller.CleanController - Временные таблицы заполнены идентификаторами удаляемых записей.
+2020-01-06 23:37:10 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы ATTACHMENT_METADATA.
+2020-01-06 23:37:10 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы MESSAGE_CONTENT.
+2020-01-06 23:37:10 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы MESSAGE_METADATA.
+2020-01-06 23:37:10 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы MESSAGE_STATE.
+2020-01-06 23:37:12 [main] INFO  ru.hemulen.controller.CleanController - Временные таблицы удалены.
+2020-01-06 23:37:12 [main] INFO  ru.hemulen.controller.CleanController - Очистка схемы CORE завершена.
