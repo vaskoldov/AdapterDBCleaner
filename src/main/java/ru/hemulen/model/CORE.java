@@ -37,23 +37,20 @@ public class CORE {
                 "WHERE MM.MESSAGE_TYPE = 'RESPONSE'\n" +
                 "  AND MM.REFERENCE_ID IS NOT NULL\n" +
                 "  AND MM.CREATION_DATE <= '" + threshold + "'\n" +
-                "  AND MC.MODE <> 'STATUS';\n" +
-                "COMMIT;";
+                "  AND MC.MODE <> 'STATUS';";
         statement.executeUpdate(sql);
         sql = "INSERT INTO CORE.RESP_TMP\n" +
                 "SELECT ID\n" +
                 "FROM CORE.MESSAGE_METADATA\n" +
                 "WHERE REFERENCE_ID IN (\n" +
                 "    SELECT ID FROM CORE.REQ_TMP\n" +
-                "    );\n" +
-                "COMMIT;";
+                "    );";
         statement.executeUpdate(sql);
         sql = "INSERT INTO CORE.RESP_TMP\n" +
                 "SELECT ID\n" +
                 "FROM CORE.MESSAGE_METADATA\n" +
                 "WHERE MESSAGE_TYPE = 'RESPONSE'\n" +
-                "   AND REFERENCE_ID IS NULL;\n" +
-                "COMMIT;";
+                "   AND REFERENCE_ID IS NULL;";
         statement.executeUpdate(sql);
     }
 
@@ -62,15 +59,13 @@ public class CORE {
                 "FROM CORE.ATTACHMENT_METADATA\n" +
                 "WHERE MESSAGE_METADATA_ID IN (\n" +
                 "    SELECT ID FROM CORE.RESP_TMP\n" +
-                "    );\n" +
-                "COMMIT;";
+                "    );";
         statement.executeUpdate(sql);
         sql = "DELETE \n" +
                 "FROM CORE.ATTACHMENT_METADATA\n" +
                 "WHERE MESSAGE_METADATA_ID IN (\n" +
                 "    SELECT ID FROM CORE.REQ_TMP\n" +
-                "    );\n" +
-                "COMMIT;";
+                "    );";
         statement.executeUpdate(sql);
     }
 
@@ -79,15 +74,13 @@ public class CORE {
                 "FROM CORE.MESSAGE_CONTENT\n" +
                 "WHERE ID IN (\n" +
                 "    SELECT ID FROM CORE.RESP_TMP\n" +
-                "    );\n" +
-                "COMMIT;";
+                "    );";
         statement.executeUpdate(sql);
         sql = "DELETE\n" +
                 "FROM CORE.MESSAGE_CONTENT\n" +
                 "WHERE ID IN (\n" +
                 "    SELECT ID FROM CORE.REQ_TMP\n" +
-                "    );" +
-                "COMMIT;";
+                "    );";
         statement.executeUpdate(sql);
     }
 
@@ -96,18 +89,14 @@ public class CORE {
                 "FROM CORE.MESSAGE_METADATA\n" +
                 "WHERE ID IN (\n" +
                 "    SELECT ID FROM CORE.RESP_TMP\n" +
-                "    );\n" +
-                "COMMIT;";
+                "    );";
         statement.executeUpdate(sql);
-        checkpoint();
         sql = "DELETE\n" +
                 "FROM CORE.MESSAGE_METADATA\n" +
                 "WHERE ID IN (\n" +
                 "    SELECT ID FROM CORE.REQ_TMP\n" +
-                "    );\n" +
-                "COMMIT;";
+                "    );";
         statement.executeUpdate(sql);
-        checkpoint();
     }
 
     public void deleteMessageState() throws SQLException {
@@ -115,15 +104,13 @@ public class CORE {
                 "FROM CORE.MESSAGE_STATE\n" +
                 "WHERE ID IN (\n" +
                 "    SELECT ID FROM CORE.RESP_TMP\n" +
-                "    );\n" +
-                "COMMIT;";
+                "    );";
         statement.executeUpdate(sql);
         sql = "DELETE\n" +
                 "FROM CORE.MESSAGE_STATE\n" +
                 "WHERE ID IN (\n" +
                 "    SELECT ID FROM CORE.REQ_TMP\n" +
-                "    );\n" +
-                "COMMIT;";
+                "    );";
         statement.executeUpdate(sql);
     }
 
@@ -139,8 +126,4 @@ public class CORE {
         }
     }
 
-    private void checkpoint() throws SQLException {
-        String sql = "CHECKPOINT SYNC;";
-        statement.execute(sql);
-    }
 }
