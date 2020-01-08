@@ -13,5 +13,11 @@
       <jdbc-driver>org.h2.Driver</jdbc-driver>
       <jdbc-url>jdbc:h2:file:C:/Temp/db/configuration</jdbc-url>
     </data-source>
+    <data-source source="LOCAL" name="cleared" uuid="af111207-209f-4dc2-a93e-5e8e6c857830">
+      <driver-ref>h2.unified</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.h2.Driver</jdbc-driver>
+      <jdbc-url>jdbc:h2:file:C:/Temp/cleared/adapter</jdbc-url>
+    </data-source>
   </component>
 </project>

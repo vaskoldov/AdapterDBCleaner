@@ -17,7 +17,7 @@ public class DBConnector {
     private UI ui;
 
     public DBConnector(String dbName, String user, String pass, boolean isUIPresent, String threshold) throws SQLException {
-        String url = String.format("jdbc:h2:file:%s;IFEXISTS=TRUE;AUTO_SERVER=TRUE;WRITE_DELAY=0", dbName);
+        String url = String.format("jdbc:h2:file:%s;IFEXISTS=TRUE;AUTO_SERVER=TRUE;TRACE_LEVEL_FILE=4", dbName);
         try {
             Class.forName("org.h2.Driver");
             connection = DriverManager.getConnection(url, user, pass);
@@ -38,7 +38,6 @@ public class DBConnector {
 
     public void close() {
         core.close();
-        // Метод close схимает и закрывает базу данных, поэтому вызывать такой же метод для ui уже не нужно.
     }
 
     public CORE getCore() {

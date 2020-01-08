@@ -514,3 +514,864 @@ WHERE ID IN (
 2020-01-06 23:37:10 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы MESSAGE_STATE.
 2020-01-06 23:37:12 [main] INFO  ru.hemulen.controller.CleanController - Временные таблицы удалены.
 2020-01-06 23:37:12 [main] INFO  ru.hemulen.controller.CleanController - Очистка схемы CORE завершена.
+2020-01-07 14:46:07 [main] INFO  h2database - adapter:database opening C:/Temp/db/adapter (build 199)
+2020-01-07 14:47:00 [main] INFO  h2database - adapter:database opened C:/Temp/db/adapter
+2020-01-07 14:47:00 [main] INFO  h2database - adapter:database connecting session #3 to C:/Temp/db/adapter
+2020-01-07 14:47:00 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL */SET AUTO_SERVER TRUE;
+2020-01-07 14:47:00 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL */SET TRACE_LEVEL_FILE 4;
+2020-01-07 14:47:00 [main] INFO  h2database - adapter:jdbc[3] 
+/**/Connection conn1 = DriverManager.getConnection("jdbc:h2:file:C:\\Temp\\db\\adapter;IFEXISTS=TRUE;AUTO_SERVER=TRUE;TRACE_LEVEL_FILE=4", "ADAPTER", "");
+2020-01-07 14:47:00 [main] INFO  ru.hemulen.controller.CleanController - Начало очистки схемы CORE.
+2020-01-07 14:47:00 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL */DROP TABLE IF EXISTS CORE.REQ_TMP;
+2020-01-07 14:47:00 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL t:1*/CREATE TABLE CORE.REQ_TMP (ID UUID NOT NULL, constraint REQ_TMP_ID_PK primary key (ID));
+2020-01-07 14:47:00 [main] INFO  ru.hemulen.controller.CleanController - Созданы временные таблицы.
+2020-01-07 14:47:18 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:40 t:17325*/INSERT INTO CORE.REQ_TMP\nSELECT DISTINCT MM.REFERENCE_ID\nFROM CORE.MESSAGE_METADATA MM\n  LEFT JOIN CORE.MESSAGE_CONTENT MC ON MM.ID = MC.ID\nWHERE MM.MESSAGE_TYPE = 'RESPONSE'\n  AND MM.REFERENCE_ID IS NOT NULL\n  AND MM.CREATION_DATE <= '2019-04-01 00:00:00'\n  AND MC.MODE <> 'STATUS';
+2020-01-07 14:47:18 [main] INFO  h2database - adapter:command slow query: 17 326 ms
+2020-01-07 14:47:18 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:80 t:23*/INSERT INTO CORE.RESP_TMP\nSELECT ID\nFROM CORE.MESSAGE_METADATA\nWHERE REFERENCE_ID IN (\n    SELECT ID FROM CORE.REQ_TMP\n    );
+2020-01-07 14:47:24 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:352 t:5873*/INSERT INTO CORE.RESP_TMP\nSELECT ID\nFROM CORE.MESSAGE_METADATA\nWHERE MESSAGE_TYPE = 'RESPONSE'\n   AND REFERENCE_ID IS NULL;
+2020-01-07 14:47:24 [main] INFO  h2database - adapter:command slow query: 5 876 ms
+2020-01-07 14:47:24 [main] INFO  ru.hemulen.controller.CleanController - Временные таблицы заполнены идентификаторами удаляемых записей.
+2020-01-07 14:47:24 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:39 t:37*/DELETE \nFROM CORE.ATTACHMENT_METADATA\nWHERE MESSAGE_METADATA_ID IN (\n    SELECT ID FROM CORE.RESP_TMP\n    );
+2020-01-07 14:47:24 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:40 t:11*/DELETE \nFROM CORE.ATTACHMENT_METADATA\nWHERE MESSAGE_METADATA_ID IN (\n    SELECT ID FROM CORE.REQ_TMP\n    );
+2020-01-07 14:47:24 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы ATTACHMENT_METADATA.
+2020-01-07 14:47:24 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:432 t:119*/DELETE\nFROM CORE.MESSAGE_CONTENT\nWHERE ID IN (\n    SELECT ID FROM CORE.RESP_TMP\n    );
+2020-01-07 14:47:24 [main] INFO  h2database - adapter:command slow query: 183 ms
+2020-01-07 14:47:24 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:40 t:9*/DELETE\nFROM CORE.MESSAGE_CONTENT\nWHERE ID IN (\n    SELECT ID FROM CORE.REQ_TMP\n    );
+2020-01-07 14:47:24 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы MESSAGE_CONTENT.
+2020-01-07 14:47:24 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:432 t:342*/DELETE\nFROM CORE.MESSAGE_METADATA\nWHERE ID IN (\n    SELECT ID FROM CORE.RESP_TMP\n    );
+2020-01-07 14:47:24 [main] INFO  h2database - adapter:command slow query: 361 ms
+2020-01-07 14:47:24 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:40 t:11*/DELETE\nFROM CORE.MESSAGE_METADATA\nWHERE ID IN (\n    SELECT ID FROM CORE.REQ_TMP\n    );
+2020-01-07 14:47:24 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы MESSAGE_METADATA.
+2020-01-07 14:47:25 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:432 t:125*/DELETE\nFROM CORE.MESSAGE_STATE\nWHERE ID IN (\n    SELECT ID FROM CORE.RESP_TMP\n    );
+2020-01-07 14:47:25 [main] INFO  h2database - adapter:command slow query: 162 ms
+2020-01-07 14:47:25 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:40 t:9*/DELETE\nFROM CORE.MESSAGE_STATE\nWHERE ID IN (\n    SELECT ID FROM CORE.REQ_TMP\n    );
+2020-01-07 14:47:25 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы MESSAGE_STATE.
+2020-01-07 14:47:25 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL t:1*/DROP TABLE IF EXISTS CORE.REQ_TMP;
+2020-01-07 14:47:25 [main] INFO  ru.hemulen.controller.CleanController - Временные таблицы удалены.
+2020-01-07 14:47:25 [main] INFO  ru.hemulen.controller.CleanController - Очистка схемы CORE завершена.
+2020-01-07 14:47:25 [main] INFO  h2database - adapter:database disconnecting session #3
+2020-01-07 14:47:25 [main] INFO  h2database - adapter:database closing C:/Temp/db/adapter
+2020-01-07 14:50:05 [main] INFO  h2database - adapter:database closed
+2020-01-07 14:50:05 [main] INFO  h2database - adapter:database disconnected session #3
+2020-01-07 14:50:05 [main] INFO  h2database - adapter:command slow query: 160 600 ms
+2020-01-07 17:09:24 [main] INFO  h2database - adapter:database opening C:/Temp/db/adapter (build 199)
+2020-01-07 17:09:48 [main] INFO  h2database - adapter:database opened C:/Temp/db/adapter
+2020-01-07 17:09:48 [main] INFO  h2database - adapter:database connecting session #3 to C:/Temp/db/adapter
+2020-01-07 17:09:48 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL */SET AUTO_SERVER TRUE;
+2020-01-07 17:09:48 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL */SET TRACE_LEVEL_FILE 4;
+2020-01-07 17:09:48 [main] INFO  h2database - adapter:jdbc[3] 
+/**/Connection conn1 = DriverManager.getConnection("jdbc:h2:file:C:\\Temp\\db\\adapter;IFEXISTS=TRUE;AUTO_SERVER=TRUE;TRACE_LEVEL_FILE=4", "ADAPTER", "");
+2020-01-07 17:09:48 [main] INFO  ru.hemulen.controller.CleanController - Начало очистки схемы CORE.
+2020-01-07 17:09:48 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL */DROP TABLE IF EXISTS CORE.REQ_TMP;
+2020-01-07 17:09:48 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL t:1*/CREATE TABLE CORE.REQ_TMP (ID UUID NOT NULL, constraint REQ_TMP_ID_PK primary key (ID));
+2020-01-07 17:09:48 [main] INFO  ru.hemulen.controller.CleanController - Созданы временные таблицы.
+2020-01-07 17:09:59 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:680 t:10995*/INSERT INTO CORE.REQ_TMP\nSELECT DISTINCT MM.REFERENCE_ID\nFROM CORE.MESSAGE_METADATA MM\n  LEFT JOIN CORE.MESSAGE_CONTENT MC ON MM.ID = MC.ID\nWHERE MM.MESSAGE_TYPE = 'RESPONSE'\n  AND MM.REFERENCE_ID IS NOT NULL\n  AND MM.CREATION_DATE <= '2019-05-01 00:00:00'\n  AND MC.MODE <> 'STATUS';
+2020-01-07 17:09:59 [main] INFO  h2database - adapter:command slow query: 11 004 ms
+2020-01-07 17:09:59 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:775 t:128*/INSERT INTO CORE.RESP_TMP\nSELECT ID\nFROM CORE.MESSAGE_METADATA\nWHERE REFERENCE_ID IN (\n    SELECT ID FROM CORE.REQ_TMP\n    );
+2020-01-07 17:09:59 [main] INFO  h2database - adapter:command slow query: 132 ms
+2020-01-07 17:10:03 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL t:4466*/INSERT INTO CORE.RESP_TMP\nSELECT ID\nFROM CORE.MESSAGE_METADATA\nWHERE MESSAGE_TYPE = 'RESPONSE'\n   AND REFERENCE_ID IS NULL;
+2020-01-07 17:10:03 [main] INFO  h2database - adapter:command slow query: 4 467 ms
+2020-01-07 17:10:03 [main] INFO  ru.hemulen.controller.CleanController - Временные таблицы заполнены идентификаторами удаляемых записей.
+2020-01-07 17:10:03 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL t:17*/DELETE \nFROM CORE.ATTACHMENT_METADATA\nWHERE MESSAGE_METADATA_ID IN (\n    SELECT ID FROM CORE.RESP_TMP\n    );
+2020-01-07 17:10:03 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:682 t:88*/DELETE \nFROM CORE.ATTACHMENT_METADATA\nWHERE MESSAGE_METADATA_ID IN (\n    SELECT ID FROM CORE.REQ_TMP\n    );
+2020-01-07 17:10:03 [main] INFO  h2database - adapter:command slow query: 123 ms
+2020-01-07 17:10:03 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы ATTACHMENT_METADATA.
+2020-01-07 17:10:03 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:775 t:52*/DELETE\nFROM CORE.MESSAGE_CONTENT\nWHERE ID IN (\n    SELECT ID FROM CORE.RESP_TMP\n    );
+2020-01-07 17:10:04 [main] INFO  h2database - adapter:command slow query: 106 ms
+2020-01-07 17:10:04 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:680 t:174*/DELETE\nFROM CORE.MESSAGE_CONTENT\nWHERE ID IN (\n    SELECT ID FROM CORE.REQ_TMP\n    );
+2020-01-07 17:10:04 [main] INFO  h2database - adapter:command slow query: 212 ms
+2020-01-07 17:10:04 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы MESSAGE_CONTENT.
+2020-01-07 17:10:04 [main] INFO  h2database - adapter:command slow query: 247 ms
+2020-01-07 17:10:04 [main] INFO  h2database - adapter:jdbc[3] exception
+org.h2.jdbc.JdbcSQLIntegrityConstraintViolationException: Нарушение ссылочной целостности: "MESSAGE_METADATA_REFERENCE_ID_TO_MESSAGE_METADATA_ID_FK: CORE.MESSAGE_METADATA FOREIGN KEY(REFERENCE_ID) REFERENCES CORE.MESSAGE_METADATA(ID) ('8046c277-94a7-4282-bab7-e2b0504cc2e4')"
+Referential integrity constraint violation: "MESSAGE_METADATA_REFERENCE_ID_TO_MESSAGE_METADATA_ID_FK: CORE.MESSAGE_METADATA FOREIGN KEY(REFERENCE_ID) REFERENCES CORE.MESSAGE_METADATA(ID) ('8046c277-94a7-4282-bab7-e2b0504cc2e4')"; SQL statement:
+DELETE
+FROM CORE.MESSAGE_METADATA
+WHERE ID IN (
+    SELECT ID FROM CORE.RESP_TMP
+    ); [23503-199]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:457) ~[h2-1.4.199.jar:1.4.199]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:427) ~[h2-1.4.199.jar:1.4.199]
+	at org.h2.message.DbException.get(DbException.java:205) ~[h2-1.4.199.jar:1.4.199]
+	at org.h2.message.DbException.get(DbException.java:181) ~[h2-1.4.199.jar:1.4.199]
+	at org.h2.constraint.ConstraintReferential.checkRow(ConstraintReferential.java:373) ~[h2-1.4.199.jar:1.4.199]
+	at org.h2.constraint.ConstraintReferential.checkRowRefTable(ConstraintReferential.java:390) ~[h2-1.4.199.jar:1.4.199]
+	at org.h2.constraint.ConstraintReferential.checkRow(ConstraintReferential.java:265) ~[h2-1.4.199.jar:1.4.199]
+	at org.h2.table.Table.fireConstraints(Table.java:1020) ~[h2-1.4.199.jar:1.4.199]
+	at org.h2.table.Table.fireAfterRow(Table.java:1038) ~[h2-1.4.199.jar:1.4.199]
+	at org.h2.command.dml.Delete.update(Delete.java:129) ~[h2-1.4.199.jar:1.4.199]
+	at org.h2.command.CommandContainer.update(CommandContainer.java:133) ~[h2-1.4.199.jar:1.4.199]
+	at org.h2.command.Command.executeUpdate(Command.java:267) ~[h2-1.4.199.jar:1.4.199]
+	at org.h2.jdbc.JdbcStatement.executeUpdateInternal(JdbcStatement.java:169) ~[h2-1.4.199.jar:1.4.199]
+	at org.h2.jdbc.JdbcStatement.executeUpdate(JdbcStatement.java:126) [h2-1.4.199.jar:1.4.199]
+	at ru.hemulen.model.CORE.deleteMessageMetadata(CORE.java:93) [classes/:?]
+	at ru.hemulen.controller.CleanController.clean(CleanController.java:67) [classes/:?]
+	at ru.hemulen.Main.main(Main.java:54) [classes/:?]
+2020-01-07 17:10:04 [main] ERROR ru.hemulen.controller.CleanController - Произошла ошибка при обработке данных в схеме CORE.
+2020-01-07 17:10:04 [main] ERROR ru.hemulen.controller.CleanController - Нарушение ссылочной целостности: "MESSAGE_METADATA_REFERENCE_ID_TO_MESSAGE_METADATA_ID_FK: CORE.MESSAGE_METADATA FOREIGN KEY(REFERENCE_ID) REFERENCES CORE.MESSAGE_METADATA(ID) ('8046c277-94a7-4282-bab7-e2b0504cc2e4')"
+Referential integrity constraint violation: "MESSAGE_METADATA_REFERENCE_ID_TO_MESSAGE_METADATA_ID_FK: CORE.MESSAGE_METADATA FOREIGN KEY(REFERENCE_ID) REFERENCES CORE.MESSAGE_METADATA(ID) ('8046c277-94a7-4282-bab7-e2b0504cc2e4')"; SQL statement:
+DELETE
+FROM CORE.MESSAGE_METADATA
+WHERE ID IN (
+    SELECT ID FROM CORE.RESP_TMP
+    ); [23503-199]
+2020-01-07 17:10:04 [main] INFO  h2database - adapter:database disconnecting session #3
+2020-01-07 17:10:04 [main] INFO  h2database - adapter:database closing C:/Temp/db/adapter
+2020-01-07 17:12:01 [main] INFO  h2database - adapter:database closed
+2020-01-07 17:12:01 [main] INFO  h2database - adapter:database disconnected session #3
+2020-01-07 17:12:01 [main] INFO  h2database - adapter:command slow query: 116 746 ms
+2020-01-07 20:58:18 [main] INFO  h2database - adapter:database opening C:/Temp/db/adapter (build 199)
+2020-01-07 20:58:18 [main] INFO  h2database - jdbc 
+/**/Connection conn0 = DriverManager.getConnection("jdbc:h2:file:C:\\Temp\\db\\adapter;IFEXISTS=TRUE;AUTO_SERVER=TRUE;TRACE_LEVEL_FILE=4", "ADAPTER", "");
+2020-01-07 20:58:18 [main] INFO  ru.hemulen.controller.CleanController - Начало очистки схемы CORE.
+2020-01-07 20:58:18 [main] INFO  ru.hemulen.controller.CleanController - Созданы временные таблицы.
+2020-01-07 21:01:26 [main] INFO  h2database - adapter:database opening C:/Temp/db/adapter (build 199)
+2020-01-07 21:01:26 [main] INFO  h2database - jdbc 
+/**/Connection conn0 = DriverManager.getConnection("jdbc:h2:file:C:\\Temp\\db\\adapter;IFEXISTS=TRUE;AUTO_SERVER=TRUE;TRACE_LEVEL_FILE=4", "ADAPTER", "");
+2020-01-07 21:01:26 [main] INFO  ru.hemulen.controller.CleanController - Начало очистки схемы CORE.
+2020-01-07 21:01:26 [main] ERROR h2database - jdbc exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Таблица "RESP1_TMP" уже существует
+Table "RESP1_TMP" already exists; SQL statement:
+
+CREATE TABLE CORE.RESP1_TMP (ID UUID NOT NULL, constraint RESP1_TMP_ID_PK primary key (ID));
+CREATE TABLE CORE.RESP2_TMP (ID UUID NOT NULL, constraint RESP2_TMP_ID_PK primary key (ID)); [42101-199]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:451) ~[h2-1.4.199.jar:1.4.199]
+	at org.h2.engine.SessionRemote.done(SessionRemote.java:607) ~[h2-1.4.199.jar:1.4.199]
+	at org.h2.command.CommandRemote.executeUpdate(CommandRemote.java:237) ~[h2-1.4.199.jar:1.4.199]
+	at org.h2.jdbc.JdbcStatement.executeUpdateInternal(JdbcStatement.java:169) ~[h2-1.4.199.jar:1.4.199]
+	at org.h2.jdbc.JdbcStatement.executeUpdate(JdbcStatement.java:126) [h2-1.4.199.jar:1.4.199]
+	at ru.hemulen.model.CORE.createTempTables(CORE.java:24) [classes/:?]
+	at ru.hemulen.controller.CleanController.clean(CleanController.java:59) [classes/:?]
+	at ru.hemulen.Main.main(Main.java:54) [classes/:?]
+2020-01-07 21:01:26 [main] ERROR ru.hemulen.controller.CleanController - Произошла ошибка при обработке данных в схеме CORE.
+2020-01-07 21:01:26 [main] ERROR ru.hemulen.controller.CleanController - Таблица "RESP1_TMP" уже существует
+Table "RESP1_TMP" already exists; SQL statement:
+
+CREATE TABLE CORE.RESP1_TMP (ID UUID NOT NULL, constraint RESP1_TMP_ID_PK primary key (ID));
+CREATE TABLE CORE.RESP2_TMP (ID UUID NOT NULL, constraint RESP2_TMP_ID_PK primary key (ID)); [42101-199]
+2020-01-07 21:02:21 [main] INFO  h2database - adapter:database opening C:/Temp/db/adapter (build 199)
+2020-01-07 21:02:21 [main] INFO  h2database - jdbc 
+/**/Connection conn0 = DriverManager.getConnection("jdbc:h2:file:C:\\Temp\\db\\adapter;IFEXISTS=TRUE;AUTO_SERVER=TRUE;TRACE_LEVEL_FILE=4", "ADAPTER", "");
+2020-01-07 21:02:21 [main] INFO  ru.hemulen.controller.CleanController - Начало очистки схемы CORE.
+2020-01-07 21:02:21 [main] INFO  ru.hemulen.controller.CleanController - Созданы временные таблицы.
+2020-01-07 21:02:52 [main] INFO  h2database - jdbc exception
+org.h2.jdbc.JdbcSQLIntegrityConstraintViolationException: Значение NULL не разрешено для поля "ID"
+NULL not allowed for column "ID"; SQL statement:
+INSERT INTO CORE.RESP1_TMP
+SELECT DISTINCT MM.REFERENCE_ID
+FROM CORE.MESSAGE_METADATA MM
+   LEFT JOIN CORE.MESSAGE_CONTENT MC ON MM.ID = MC.ID
+WHERE MM.MESSAGE_TYPE = 'RESPONSE'
+   AND MM.CREATION_DATE < '2019-06-01 00:00:00'
+   AND MC.MODE IN ('MESSAGE', 'REJECT', 'ERROR'); [23502-199]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:457) ~[h2-1.4.199.jar:1.4.199]
+	at org.h2.engine.SessionRemote.done(SessionRemote.java:607) ~[h2-1.4.199.jar:1.4.199]
+	at org.h2.command.CommandRemote.executeUpdate(CommandRemote.java:237) ~[h2-1.4.199.jar:1.4.199]
+	at org.h2.jdbc.JdbcStatement.executeUpdateInternal(JdbcStatement.java:169) ~[h2-1.4.199.jar:1.4.199]
+	at org.h2.jdbc.JdbcStatement.executeUpdate(JdbcStatement.java:126) [h2-1.4.199.jar:1.4.199]
+	at ru.hemulen.model.CORE.fillTempTables(CORE.java:54) [classes/:?]
+	at ru.hemulen.controller.CleanController.clean(CleanController.java:61) [classes/:?]
+	at ru.hemulen.Main.main(Main.java:54) [classes/:?]
+2020-01-07 21:02:52 [main] ERROR ru.hemulen.controller.CleanController - Произошла ошибка при обработке данных в схеме CORE.
+2020-01-07 21:02:52 [main] ERROR ru.hemulen.controller.CleanController - Значение NULL не разрешено для поля "ID"
+NULL not allowed for column "ID"; SQL statement:
+INSERT INTO CORE.RESP1_TMP
+SELECT DISTINCT MM.REFERENCE_ID
+FROM CORE.MESSAGE_METADATA MM
+   LEFT JOIN CORE.MESSAGE_CONTENT MC ON MM.ID = MC.ID
+WHERE MM.MESSAGE_TYPE = 'RESPONSE'
+   AND MM.CREATION_DATE < '2019-06-01 00:00:00'
+   AND MC.MODE IN ('MESSAGE', 'REJECT', 'ERROR'); [23502-199]
+2020-01-07 21:32:03 [main] INFO  h2database - adapter:database opening C:/Temp/db/adapter (build 199)
+2020-01-07 21:32:03 [main] INFO  h2database - jdbc 
+/**/Connection conn0 = DriverManager.getConnection("jdbc:h2:file:C:\\Temp\\db\\adapter;IFEXISTS=TRUE;AUTO_SERVER=TRUE;TRACE_LEVEL_FILE=4", "ADAPTER", "");
+2020-01-07 21:32:03 [main] INFO  ru.hemulen.controller.CleanController - Начало очистки схемы CORE.
+2020-01-07 21:32:03 [main] INFO  ru.hemulen.controller.CleanController - Созданы временные таблицы.
+2020-01-07 21:32:38 [main] ERROR h2database - jdbc exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Синтаксическая ошибка в выражении SQL "INSERT INTO CORE.RESP1_TMP
+SELECT ID
+FROM CORE.MESSAGE_METADATA
+WHERE REFERENCE_ID IN (
+   SELECT ID FROM CORE.REQ_TMP
+)
+ON[*] CONFLICT (ID) DO NOTHING;"
+Syntax error in SQL statement "INSERT INTO CORE.RESP1_TMP
+SELECT ID
+FROM CORE.MESSAGE_METADATA
+WHERE REFERENCE_ID IN (
+   SELECT ID FROM CORE.REQ_TMP
+)
+ON[*] CONFLICT (ID) DO NOTHING;"; SQL statement:
+INSERT INTO CORE.RESP1_TMP
+SELECT ID
+FROM CORE.MESSAGE_METADATA
+WHERE REFERENCE_ID IN (
+   SELECT ID FROM CORE.REQ_TMP
+)
+ON CONFLICT (ID) DO NOTHING; [42000-199]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:451) ~[h2-1.4.199.jar:1.4.199]
+	at org.h2.engine.SessionRemote.done(SessionRemote.java:607) ~[h2-1.4.199.jar:1.4.199]
+	at org.h2.command.CommandRemote.prepare(CommandRemote.java:85) ~[h2-1.4.199.jar:1.4.199]
+	at org.h2.command.CommandRemote.<init>(CommandRemote.java:51) ~[h2-1.4.199.jar:1.4.199]
+	at org.h2.engine.SessionRemote.prepareCommand(SessionRemote.java:477) ~[h2-1.4.199.jar:1.4.199]
+	at org.h2.jdbc.JdbcConnection.prepareCommand(JdbcConnection.java:1292) ~[h2-1.4.199.jar:1.4.199]
+	at org.h2.jdbc.JdbcStatement.executeUpdateInternal(JdbcStatement.java:165) ~[h2-1.4.199.jar:1.4.199]
+	at org.h2.jdbc.JdbcStatement.executeUpdate(JdbcStatement.java:126) [h2-1.4.199.jar:1.4.199]
+	at ru.hemulen.model.CORE.fillTempTables(CORE.java:80) [classes/:?]
+	at ru.hemulen.controller.CleanController.clean(CleanController.java:61) [classes/:?]
+	at ru.hemulen.Main.main(Main.java:54) [classes/:?]
+2020-01-07 21:32:38 [main] ERROR ru.hemulen.controller.CleanController - Произошла ошибка при обработке данных в схеме CORE.
+2020-01-07 21:32:38 [main] ERROR ru.hemulen.controller.CleanController - Синтаксическая ошибка в выражении SQL "INSERT INTO CORE.RESP1_TMP
+SELECT ID
+FROM CORE.MESSAGE_METADATA
+WHERE REFERENCE_ID IN (
+   SELECT ID FROM CORE.REQ_TMP
+)
+ON[*] CONFLICT (ID) DO NOTHING;"
+Syntax error in SQL statement "INSERT INTO CORE.RESP1_TMP
+SELECT ID
+FROM CORE.MESSAGE_METADATA
+WHERE REFERENCE_ID IN (
+   SELECT ID FROM CORE.REQ_TMP
+)
+ON[*] CONFLICT (ID) DO NOTHING;"; SQL statement:
+INSERT INTO CORE.RESP1_TMP
+SELECT ID
+FROM CORE.MESSAGE_METADATA
+WHERE REFERENCE_ID IN (
+   SELECT ID FROM CORE.REQ_TMP
+)
+ON CONFLICT (ID) DO NOTHING; [42000-199]
+2020-01-07 21:40:00 [main] INFO  h2database - adapter:database opening C:/Temp/db/adapter (build 199)
+2020-01-07 21:40:00 [main] INFO  h2database - jdbc 
+/**/Connection conn0 = DriverManager.getConnection("jdbc:h2:file:C:\\Temp\\db\\adapter;IFEXISTS=TRUE;AUTO_SERVER=TRUE;TRACE_LEVEL_FILE=4", "ADAPTER", "");
+2020-01-07 21:40:00 [main] INFO  ru.hemulen.controller.CleanController - Начало очистки схемы CORE.
+2020-01-07 21:40:00 [main] INFO  ru.hemulen.controller.CleanController - Созданы временные таблицы.
+2020-01-07 21:40:43 [main] INFO  h2database - jdbc exception
+org.h2.jdbc.JdbcSQLIntegrityConstraintViolationException: Нарушение уникального индекса или первичного ключа: "PRIMARY_KEY_2FB ON CORE.RESP2_TMP(ID) VALUES ('af72efbc-5483-40ee-ac35-5e8687f984e9', 1)"
+Unique index or primary key violation: "PRIMARY_KEY_2FB ON CORE.RESP2_TMP(ID) VALUES ('af72efbc-5483-40ee-ac35-5e8687f984e9', 1)"; SQL statement:
+INSERT INTO CORE.RESP2_TMP
+SELECT ID
+FROM CORE.MESSAGE_METADATA
+WHERE REFERENCE_ID IN (
+   SELECT ID FROM CORE.RESP1_TMP
+); [23505-199]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:457) ~[h2-1.4.199.jar:1.4.199]
+	at org.h2.engine.SessionRemote.done(SessionRemote.java:607) ~[h2-1.4.199.jar:1.4.199]
+	at org.h2.command.CommandRemote.executeUpdate(CommandRemote.java:237) ~[h2-1.4.199.jar:1.4.199]
+	at org.h2.jdbc.JdbcStatement.executeUpdateInternal(JdbcStatement.java:169) ~[h2-1.4.199.jar:1.4.199]
+	at org.h2.jdbc.JdbcStatement.executeUpdate(JdbcStatement.java:126) [h2-1.4.199.jar:1.4.199]
+	at ru.hemulen.model.CORE.fillTempTables(CORE.java:86) [classes/:?]
+	at ru.hemulen.controller.CleanController.clean(CleanController.java:61) [classes/:?]
+	at ru.hemulen.Main.main(Main.java:54) [classes/:?]
+2020-01-07 21:40:43 [main] ERROR ru.hemulen.controller.CleanController - Произошла ошибка при обработке данных в схеме CORE.
+2020-01-07 21:40:43 [main] ERROR ru.hemulen.controller.CleanController - Нарушение уникального индекса или первичного ключа: "PRIMARY_KEY_2FB ON CORE.RESP2_TMP(ID) VALUES ('af72efbc-5483-40ee-ac35-5e8687f984e9', 1)"
+Unique index or primary key violation: "PRIMARY_KEY_2FB ON CORE.RESP2_TMP(ID) VALUES ('af72efbc-5483-40ee-ac35-5e8687f984e9', 1)"; SQL statement:
+INSERT INTO CORE.RESP2_TMP
+SELECT ID
+FROM CORE.MESSAGE_METADATA
+WHERE REFERENCE_ID IN (
+   SELECT ID FROM CORE.RESP1_TMP
+); [23505-199]
+2020-01-08 08:25:00 [main] INFO  h2database - adapter:database opening C:/Temp/db/adapter (build 199)
+2020-01-08 08:26:07 [main] INFO  h2database - adapter:database opened C:/Temp/db/adapter
+2020-01-08 08:26:07 [main] INFO  h2database - adapter:database connecting session #3 to C:/Temp/db/adapter
+2020-01-08 08:26:07 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL */SET AUTO_SERVER TRUE;
+2020-01-08 08:26:07 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL */SET TRACE_LEVEL_FILE 4;
+2020-01-08 08:26:07 [main] INFO  h2database - adapter:jdbc[3] 
+/**/Connection conn1 = DriverManager.getConnection("jdbc:h2:file:C:\\Temp\\db\\adapter;IFEXISTS=TRUE;AUTO_SERVER=TRUE;TRACE_LEVEL_FILE=4", "ADAPTER", "");
+2020-01-08 08:26:07 [main] INFO  ru.hemulen.controller.CleanController - Начало очистки схемы CORE.
+2020-01-08 08:26:07 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL t:2*/DROP TABLE IF EXISTS CORE.REQ_TMP;
+2020-01-08 08:26:07 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL */DROP TABLE IF EXISTS CORE.RESP2_TMP;
+2020-01-08 08:26:07 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL */CREATE TABLE CORE.REQ_TMP (ID UUID NOT NULL, constraint REQ_TMP_ID_PK primary key (ID));
+2020-01-08 08:26:07 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL */CREATE TABLE CORE.RESP2_TMP (ID UUID NOT NULL, constraint RESP2_TMP_ID_PK primary key (ID));
+2020-01-08 08:26:07 [main] INFO  ru.hemulen.controller.CleanController - Созданы временные таблицы.
+2020-01-08 08:26:27 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:2759 t:19995*/INSERT INTO CORE.REQ_TMP\nSELECT DISTINCT MM.REFERENCE_ID\nFROM CORE.MESSAGE_METADATA MM\n  LEFT JOIN CORE.MESSAGE_CONTENT MC ON MM.ID = MC.ID\nWHERE MM.MESSAGE_TYPE = 'RESPONSE'\n  AND MM.REFERENCE_ID IS NOT NULL\n  AND MM.CREATION_DATE < '2019-06-01 00:00:00'\n  AND MC.MODE IN ('MESSAGE', 'REJECT', 'ERROR');
+2020-01-08 08:26:27 [main] INFO  h2database - adapter:command slow query: 20 025 ms
+2020-01-08 08:26:55 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:2759 t:27787*/INSERT INTO CORE.RESP1_TMP\nSELECT DISTINCT MM.REFERENCE_ID\nFROM CORE.MESSAGE_METADATA MM\n   LEFT JOIN CORE.MESSAGE_CONTENT MC ON MM.ID = MC.ID\nWHERE MM.MESSAGE_TYPE = 'RESPONSE'\n   AND MM.REFERENCE_ID IS NOT NULL\n   AND MM.CREATION_DATE < '2019-06-01 00:00:00'\n   AND MC.MODE IN ('MESSAGE', 'REJECT', 'ERROR');
+2020-01-08 08:26:55 [main] INFO  h2database - adapter:command slow query: 27 808 ms
+2020-01-08 08:26:57 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:2995 t:1669*/INSERT INTO CORE.RESP2_TMP\nSELECT ID\nFROM CORE.MESSAGE_METADATA\nWHERE REFERENCE_ID IN (\n    SELECT ID FROM CORE.RESP1_TMP\n    );
+2020-01-08 08:26:57 [main] INFO  h2database - adapter:command slow query: 1 682 ms
+2020-01-08 08:27:02 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:352 t:4892*/INSERT INTO CORE.RESP1_TMP\nSELECT ID\nFROM CORE.MESSAGE_METADATA\nWHERE MESSAGE_TYPE = 'RESPONSE'\n   AND REFERENCE_ID IS NULL;
+2020-01-08 08:27:02 [main] INFO  h2database - adapter:command slow query: 4 893 ms
+2020-01-08 08:27:02 [main] INFO  ru.hemulen.controller.CleanController - Временные таблицы заполнены идентификаторами удаляемых записей.
+2020-01-08 08:27:02 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL t:46*/DELETE \nFROM CORE.ATTACHMENT_METADATA\nWHERE MESSAGE_METADATA_ID IN (\n    SELECT ID FROM CORE.RESP2_TMP\n    );
+2020-01-08 08:27:02 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:2800 t:324*/DELETE \nFROM CORE.ATTACHMENT_METADATA\nWHERE MESSAGE_METADATA_ID IN (\n    SELECT ID FROM CORE.RESP1_TMP\n    );
+2020-01-08 08:27:02 [main] INFO  h2database - adapter:command slow query: 538 ms
+2020-01-08 08:27:02 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL t:7*/DELETE \nFROM CORE.ATTACHMENT_METADATA\nWHERE MESSAGE_METADATA_ID IN (\n    SELECT ID FROM CORE.REQ_TMP\n    );
+2020-01-08 08:27:02 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы ATTACHMENT_METADATA.
+2020-01-08 08:27:03 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:2995 t:791*/DELETE\nFROM CORE.MESSAGE_CONTENT\nWHERE ID IN (\n    SELECT ID FROM CORE.RESP2_TMP\n    );
+2020-01-08 08:27:04 [main] INFO  h2database - adapter:command slow query: 1 262 ms
+2020-01-08 08:27:04 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL t:4*/DELETE \nFROM CORE.ATTACHMENT_METADATA\nWHERE MESSAGE_METADATA_ID IN (\n    SELECT ID FROM CORE.RESP1_TMP\n    );
+2020-01-08 08:27:04 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:2759 t:635*/DELETE\nFROM CORE.MESSAGE_CONTENT\nWHERE ID IN (\n    SELECT ID FROM CORE.REQ_TMP\n    );
+2020-01-08 08:27:04 [main] INFO  h2database - adapter:command slow query: 882 ms
+2020-01-08 08:27:04 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы MESSAGE_CONTENT.
+2020-01-08 08:27:14 [main] INFO  h2database - adapter:command slow query: 9 750 ms
+2020-01-08 08:27:14 [main] INFO  h2database - adapter:jdbc[3] exception
+org.h2.jdbc.JdbcSQLIntegrityConstraintViolationException: Нарушение ссылочной целостности: "MESSAGE_METADATA_REFERENCE_ID_TO_MESSAGE_METADATA_ID_FK: CORE.MESSAGE_METADATA FOREIGN KEY(REFERENCE_ID) REFERENCES CORE.MESSAGE_METADATA(ID) ('8004fc51-d677-4cdf-9b6e-d4d40ec61b32')"
+Referential integrity constraint violation: "MESSAGE_METADATA_REFERENCE_ID_TO_MESSAGE_METADATA_ID_FK: CORE.MESSAGE_METADATA FOREIGN KEY(REFERENCE_ID) REFERENCES CORE.MESSAGE_METADATA(ID) ('8004fc51-d677-4cdf-9b6e-d4d40ec61b32')"; SQL statement:
+DELETE
+FROM CORE.MESSAGE_METADATA
+WHERE ID IN (
+    SELECT ID FROM CORE.RESP2_TMP
+    ); [23503-199]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:457) ~[h2-1.4.199.jar:1.4.199]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:427) ~[h2-1.4.199.jar:1.4.199]
+	at org.h2.message.DbException.get(DbException.java:205) ~[h2-1.4.199.jar:1.4.199]
+	at org.h2.message.DbException.get(DbException.java:181) ~[h2-1.4.199.jar:1.4.199]
+	at org.h2.constraint.ConstraintReferential.checkRow(ConstraintReferential.java:373) ~[h2-1.4.199.jar:1.4.199]
+	at org.h2.constraint.ConstraintReferential.checkRowRefTable(ConstraintReferential.java:390) ~[h2-1.4.199.jar:1.4.199]
+	at org.h2.constraint.ConstraintReferential.checkRow(ConstraintReferential.java:265) ~[h2-1.4.199.jar:1.4.199]
+	at org.h2.table.Table.fireConstraints(Table.java:1020) ~[h2-1.4.199.jar:1.4.199]
+	at org.h2.table.Table.fireAfterRow(Table.java:1038) ~[h2-1.4.199.jar:1.4.199]
+	at org.h2.command.dml.Delete.update(Delete.java:129) ~[h2-1.4.199.jar:1.4.199]
+	at org.h2.command.CommandContainer.update(CommandContainer.java:133) ~[h2-1.4.199.jar:1.4.199]
+	at org.h2.command.Command.executeUpdate(Command.java:267) ~[h2-1.4.199.jar:1.4.199]
+	at org.h2.jdbc.JdbcStatement.executeUpdateInternal(JdbcStatement.java:169) ~[h2-1.4.199.jar:1.4.199]
+	at org.h2.jdbc.JdbcStatement.executeUpdate(JdbcStatement.java:126) [h2-1.4.199.jar:1.4.199]
+	at ru.hemulen.model.CORE.deleteMessageMetadata(CORE.java:147) [classes/:?]
+	at ru.hemulen.controller.CleanController.clean(CleanController.java:67) [classes/:?]
+	at ru.hemulen.Main.main(Main.java:54) [classes/:?]
+2020-01-08 08:27:14 [main] ERROR ru.hemulen.controller.CleanController - Произошла ошибка при обработке данных в схеме CORE.
+2020-01-08 08:27:14 [main] ERROR ru.hemulen.controller.CleanController - Нарушение ссылочной целостности: "MESSAGE_METADATA_REFERENCE_ID_TO_MESSAGE_METADATA_ID_FK: CORE.MESSAGE_METADATA FOREIGN KEY(REFERENCE_ID) REFERENCES CORE.MESSAGE_METADATA(ID) ('8004fc51-d677-4cdf-9b6e-d4d40ec61b32')"
+Referential integrity constraint violation: "MESSAGE_METADATA_REFERENCE_ID_TO_MESSAGE_METADATA_ID_FK: CORE.MESSAGE_METADATA FOREIGN KEY(REFERENCE_ID) REFERENCES CORE.MESSAGE_METADATA(ID) ('8004fc51-d677-4cdf-9b6e-d4d40ec61b32')"; SQL statement:
+DELETE
+FROM CORE.MESSAGE_METADATA
+WHERE ID IN (
+    SELECT ID FROM CORE.RESP2_TMP
+    ); [23503-199]
+2020-01-08 08:27:14 [Thread-1] INFO  h2database - adapter:database closing C:/Temp/db/adapter from shutdown hook
+2020-01-08 08:27:14 [Thread-1] INFO  h2database - adapter:database disconnecting session #3
+2020-01-08 10:58:27 [main] INFO  h2database - adapter:database opening C:/Temp/db/adapter (build 199)
+2020-01-08 10:58:27 [main] INFO  h2database - jdbc 
+/**/Connection conn0 = DriverManager.getConnection("jdbc:h2:file:C:\\Temp\\db\\adapter;IFEXISTS=TRUE;AUTO_SERVER=TRUE;TRACE_LEVEL_FILE=4", "ADAPTER", "");
+2020-01-08 10:58:27 [main] INFO  ru.hemulen.controller.CleanController - Начало очистки схемы CORE.
+2020-01-08 10:58:27 [main] INFO  ru.hemulen.controller.CleanController - Созданы временные таблицы.
+2020-01-08 11:04:11 [main] INFO  ru.hemulen.controller.CleanController - Временные таблицы заполнены идентификаторами удаляемых записей.
+2020-01-08 11:04:11 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы ATTACHMENT_METADATA.
+2020-01-08 11:04:15 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы MESSAGE_CONTENT.
+2020-01-08 11:04:18 [main] INFO  h2database - jdbc exception
+org.h2.jdbc.JdbcSQLIntegrityConstraintViolationException: Нарушение ссылочной целостности: "MESSAGE_METADATA_REFERENCE_ID_TO_MESSAGE_METADATA_ID_FK: CORE.MESSAGE_METADATA FOREIGN KEY(REFERENCE_ID) REFERENCES CORE.MESSAGE_METADATA(ID) ('801c2ab0-8359-47b6-9824-d102dd0c9426')"
+Referential integrity constraint violation: "MESSAGE_METADATA_REFERENCE_ID_TO_MESSAGE_METADATA_ID_FK: CORE.MESSAGE_METADATA FOREIGN KEY(REFERENCE_ID) REFERENCES CORE.MESSAGE_METADATA(ID) ('801c2ab0-8359-47b6-9824-d102dd0c9426')"; SQL statement:
+DELETE
+FROM CORE.MESSAGE_METADATA
+WHERE ID IN (
+    SELECT ID FROM CORE.REQ_TMP
+    ); [23503-199]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:457) ~[h2-1.4.199.jar:1.4.199]
+	at org.h2.engine.SessionRemote.done(SessionRemote.java:607) ~[h2-1.4.199.jar:1.4.199]
+	at org.h2.command.CommandRemote.executeUpdate(CommandRemote.java:237) ~[h2-1.4.199.jar:1.4.199]
+	at org.h2.jdbc.JdbcStatement.executeUpdateInternal(JdbcStatement.java:169) ~[h2-1.4.199.jar:1.4.199]
+	at org.h2.jdbc.JdbcStatement.executeUpdate(JdbcStatement.java:126) [h2-1.4.199.jar:1.4.199]
+	at ru.hemulen.model.CORE.deleteMessageMetadata(CORE.java:141) [classes/:?]
+	at ru.hemulen.controller.CleanController.clean(CleanController.java:67) [classes/:?]
+	at ru.hemulen.Main.main(Main.java:54) [classes/:?]
+2020-01-08 11:04:18 [main] ERROR ru.hemulen.controller.CleanController - Произошла ошибка при обработке данных в схеме CORE.
+2020-01-08 11:04:18 [main] ERROR ru.hemulen.controller.CleanController - Нарушение ссылочной целостности: "MESSAGE_METADATA_REFERENCE_ID_TO_MESSAGE_METADATA_ID_FK: CORE.MESSAGE_METADATA FOREIGN KEY(REFERENCE_ID) REFERENCES CORE.MESSAGE_METADATA(ID) ('801c2ab0-8359-47b6-9824-d102dd0c9426')"
+Referential integrity constraint violation: "MESSAGE_METADATA_REFERENCE_ID_TO_MESSAGE_METADATA_ID_FK: CORE.MESSAGE_METADATA FOREIGN KEY(REFERENCE_ID) REFERENCES CORE.MESSAGE_METADATA(ID) ('801c2ab0-8359-47b6-9824-d102dd0c9426')"; SQL statement:
+DELETE
+FROM CORE.MESSAGE_METADATA
+WHERE ID IN (
+    SELECT ID FROM CORE.REQ_TMP
+    ); [23503-199]
+2020-01-08 11:21:13 [main] INFO  h2database - adapter:database opening C:/Temp/db/adapter (build 199)
+2020-01-08 11:22:07 [main] INFO  h2database - adapter:database opened C:/Temp/db/adapter
+2020-01-08 11:22:07 [main] INFO  h2database - adapter:database connecting session #3 to C:/Temp/db/adapter
+2020-01-08 11:22:07 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL */SET AUTO_SERVER TRUE;
+2020-01-08 11:22:07 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL */SET TRACE_LEVEL_FILE 4;
+2020-01-08 11:22:07 [main] INFO  h2database - adapter:jdbc[3] 
+/**/Connection conn1 = DriverManager.getConnection("jdbc:h2:file:C:\\Temp\\db\\adapter;IFEXISTS=TRUE;AUTO_SERVER=TRUE;TRACE_LEVEL_FILE=4", "ADAPTER", "");
+2020-01-08 11:22:07 [main] INFO  ru.hemulen.controller.CleanController - Начало очистки схемы CORE.
+2020-01-08 11:22:07 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL */DROP TABLE IF EXISTS CORE.REQ_TMP;
+2020-01-08 11:22:07 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL */DROP TABLE IF EXISTS CORE.RESP2_TMP;
+2020-01-08 11:22:07 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL t:2*/CREATE TABLE CORE.REQ_TMP (ID UUID NOT NULL, constraint REQ_TMP_ID_PK primary key (ID));
+2020-01-08 11:22:07 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL t:1*/CREATE TABLE CORE.RESP2_TMP (ID UUID NOT NULL, constraint RESP2_TMP_ID_PK primary key (ID));
+2020-01-08 11:22:07 [main] INFO  ru.hemulen.controller.CleanController - Созданы временные таблицы.
+2020-01-08 11:23:02 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL t:54542*/INSERT INTO CORE.REQ_TMP\nSELECT DISTINCT REQ.ID\nFROM CORE.MESSAGE_METADATA REQ\n         LEFT JOIN CORE.MESSAGE_METADATA L1 ON L1.REFERENCE_ID = REQ.ID\n         LEFT JOIN CORE.MESSAGE_METADATA L2 ON L2.REFERENCE_ID = L1.ID\n         LEFT JOIN CORE.MESSAGE_CONTENT MC ON L2.ID = MC.ID\nWHERE L2.MESSAGE_TYPE = 'RESPONSE'\n  AND L1.MESSAGE_TYPE = 'RESPONSE'\n  AND REQ.MESSAGE_TYPE = 'REQUEST'\n  AND REQ.CREATION_DATE < '2019-06-01 00:00:00'\n  AND MC.MODE IN ('MESSAGE', 'REJECT', 'ERROR');
+2020-01-08 11:23:02 [main] INFO  h2database - adapter:command slow query: 54 542 ms
+2020-01-08 11:23:12 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:2759 t:10587*/INSERT INTO CORE.REQ_TMP\nSELECT DISTINCT REQ.ID\nFROM CORE.MESSAGE_METADATA REQ\n         LEFT JOIN CORE.MESSAGE_METADATA L1 ON L1.REFERENCE_ID = REQ.ID\n         LEFT JOIN CORE.MESSAGE_CONTENT MC ON L1.ID = MC.ID\nWHERE L1.MESSAGE_TYPE = 'RESPONSE'\n  AND REQ.MESSAGE_TYPE = 'REQUEST'\n  AND REQ.CREATION_DATE < '2019-06-01 00:00:00'\n  AND MC.MODE IN ('MESSAGE', 'REJECT', 'ERROR');
+2020-01-08 11:23:12 [main] INFO  h2database - adapter:command slow query: 10 622 ms
+2020-01-08 11:23:13 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:2995 t:1067*/INSERT INTO CORE.RESP1_TMP\nSELECT ID\nFROM CORE.MESSAGE_METADATA\nWHERE REFERENCE_ID IN (SELECT ID FROM CORE.REQ_TMP);
+2020-01-08 11:23:13 [main] INFO  h2database - adapter:command slow query: 1 081 ms
+2020-01-08 11:23:14 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:2532 t:115*/INSERT INTO CORE.RESP2_TMP\nSELECT ID\nFROM CORE.MESSAGE_METADATA\nWHERE REFERENCE_ID IN (SELECT ID FROM CORE.RESP1_TMP);
+2020-01-08 11:23:14 [main] INFO  h2database - adapter:command slow query: 124 ms
+2020-01-08 11:23:18 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:352 t:4380*/INSERT INTO CORE.RESP1_TMP\nSELECT ID\nFROM CORE.MESSAGE_METADATA\nWHERE MESSAGE_TYPE = 'RESPONSE'\n   AND REFERENCE_ID IS NULL;
+2020-01-08 11:23:18 [main] INFO  h2database - adapter:command slow query: 4 381 ms
+2020-01-08 11:23:18 [main] INFO  ru.hemulen.controller.CleanController - Временные таблицы заполнены идентификаторами удаляемых записей.
+2020-01-08 11:23:18 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL t:36*/DELETE \nFROM CORE.ATTACHMENT_METADATA\nWHERE MESSAGE_METADATA_ID IN (\n    SELECT ID FROM CORE.RESP2_TMP\n    );
+2020-01-08 11:23:18 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:39 t:33*/DELETE \nFROM CORE.ATTACHMENT_METADATA\nWHERE MESSAGE_METADATA_ID IN (\n    SELECT ID FROM CORE.RESP1_TMP\n    );
+2020-01-08 11:23:18 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:2761 t:258*/DELETE \nFROM CORE.ATTACHMENT_METADATA\nWHERE MESSAGE_METADATA_ID IN (\n    SELECT ID FROM CORE.REQ_TMP\n    );
+2020-01-08 11:23:18 [main] INFO  h2database - adapter:command slow query: 390 ms
+2020-01-08 11:23:18 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы ATTACHMENT_METADATA.
+2020-01-08 11:23:18 [main] ERROR h2database - adapter:jdbc[3] exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Столбец "MESSAGE_METADATA_ID" не найден
+Column "MESSAGE_METADATA_ID" not found; SQL statement:
+DELETE
+FROM CORE.MESSAGE_CONTENT
+WHERE MESSAGE_METADATA_ID IN (
+    SELECT ID FROM CORE.RESP2_TMP
+    ); [42122-199]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:451) ~[h2-1.4.199.jar:1.4.199]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:427) ~[h2-1.4.199.jar:1.4.199]
+	at org.h2.message.DbException.get(DbException.java:205) ~[h2-1.4.199.jar:1.4.199]
+	at org.h2.message.DbException.get(DbException.java:181) ~[h2-1.4.199.jar:1.4.199]
+	at org.h2.expression.ExpressionColumn.getColumnException(ExpressionColumn.java:176) ~[h2-1.4.199.jar:1.4.199]
+	at org.h2.expression.ExpressionColumn.optimize(ExpressionColumn.java:158) ~[h2-1.4.199.jar:1.4.199]
+	at org.h2.expression.condition.ConditionInSelect.optimize(ConditionInSelect.java:147) ~[h2-1.4.199.jar:1.4.199]
+	at org.h2.command.dml.Delete.prepare(Delete.java:160) ~[h2-1.4.199.jar:1.4.199]
+	at org.h2.command.Parser.prepareCommand(Parser.java:689) ~[h2-1.4.199.jar:1.4.199]
+	at org.h2.engine.Session.prepareLocal(Session.java:627) ~[h2-1.4.199.jar:1.4.199]
+	at org.h2.engine.Session.prepareCommand(Session.java:565) ~[h2-1.4.199.jar:1.4.199]
+	at org.h2.jdbc.JdbcConnection.prepareCommand(JdbcConnection.java:1292) ~[h2-1.4.199.jar:1.4.199]
+	at org.h2.jdbc.JdbcStatement.executeUpdateInternal(JdbcStatement.java:165) ~[h2-1.4.199.jar:1.4.199]
+	at org.h2.jdbc.JdbcStatement.executeUpdate(JdbcStatement.java:126) [h2-1.4.199.jar:1.4.199]
+	at ru.hemulen.model.CORE.deleteMessageContent(CORE.java:108) [classes/:?]
+	at ru.hemulen.controller.CleanController.clean(CleanController.java:65) [classes/:?]
+	at ru.hemulen.Main.main(Main.java:54) [classes/:?]
+2020-01-08 11:23:18 [main] ERROR ru.hemulen.controller.CleanController - Произошла ошибка при обработке данных в схеме CORE.
+2020-01-08 11:23:18 [main] ERROR ru.hemulen.controller.CleanController - Столбец "MESSAGE_METADATA_ID" не найден
+Column "MESSAGE_METADATA_ID" not found; SQL statement:
+DELETE
+FROM CORE.MESSAGE_CONTENT
+WHERE MESSAGE_METADATA_ID IN (
+    SELECT ID FROM CORE.RESP2_TMP
+    ); [42122-199]
+2020-01-08 11:23:18 [Thread-1] INFO  h2database - adapter:database closing C:/Temp/db/adapter from shutdown hook
+2020-01-08 11:23:18 [Thread-1] INFO  h2database - adapter:database disconnecting session #3
+2020-01-08 11:23:18 [Thread-1] INFO  h2database - adapter:database disconnected session #3
+2020-01-08 11:23:18 [Thread-1] INFO  h2database - adapter:database closing C:/Temp/db/adapter
+2020-01-08 11:28:26 [main] INFO  h2database - adapter:database opening C:/Temp/db/adapter (build 199)
+2020-01-08 11:30:57 [main] INFO  h2database - adapter:database opening C:/Temp/db/adapter (build 199)
+2020-01-08 11:31:51 [main] INFO  h2database - adapter:database opened C:/Temp/db/adapter
+2020-01-08 11:31:51 [main] INFO  h2database - adapter:database connecting session #3 to C:/Temp/db/adapter
+2020-01-08 11:31:51 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL */SET AUTO_SERVER TRUE;
+2020-01-08 11:31:51 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL */SET TRACE_LEVEL_FILE 4;
+2020-01-08 11:31:51 [main] INFO  h2database - adapter:jdbc[3] 
+/**/Connection conn1 = DriverManager.getConnection("jdbc:h2:file:C:\\Temp\\db\\adapter;IFEXISTS=TRUE;AUTO_SERVER=TRUE;TRACE_LEVEL_FILE=4", "ADAPTER", "");
+2020-01-08 11:31:51 [main] INFO  ru.hemulen.controller.CleanController - Начало очистки схемы CORE.
+2020-01-08 11:31:51 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL */DROP TABLE IF EXISTS CORE.REQ_TMP;
+2020-01-08 11:31:51 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL */DROP TABLE IF EXISTS CORE.RESP2_TMP;
+2020-01-08 11:31:51 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL t:1*/CREATE TABLE CORE.REQ_TMP (ID UUID NOT NULL, constraint REQ_TMP_ID_PK primary key (ID));
+2020-01-08 11:31:51 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL */CREATE TABLE CORE.RESP2_TMP (ID UUID NOT NULL, constraint RESP2_TMP_ID_PK primary key (ID));
+2020-01-08 11:31:51 [main] INFO  ru.hemulen.controller.CleanController - Созданы временные таблицы.
+2020-01-08 11:32:46 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL t:55787*/INSERT INTO CORE.REQ_TMP\nSELECT DISTINCT REQ.ID\nFROM CORE.MESSAGE_METADATA REQ\n         LEFT JOIN CORE.MESSAGE_METADATA L1 ON L1.REFERENCE_ID = REQ.ID\n         LEFT JOIN CORE.MESSAGE_METADATA L2 ON L2.REFERENCE_ID = L1.ID\n         LEFT JOIN CORE.MESSAGE_CONTENT MC ON L2.ID = MC.ID\nWHERE L2.MESSAGE_TYPE = 'RESPONSE'\n  AND L1.MESSAGE_TYPE = 'RESPONSE'\n  AND REQ.MESSAGE_TYPE = 'REQUEST'\n  AND REQ.CREATION_DATE < '2019-06-01 00:00:00'\n  AND MC.MODE IN ('MESSAGE', 'REJECT', 'ERROR');
+2020-01-08 11:32:46 [main] INFO  h2database - adapter:command slow query: 55 787 ms
+2020-01-08 11:32:57 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:2759 t:10710*/INSERT INTO CORE.REQ_TMP\nSELECT DISTINCT REQ.ID\nFROM CORE.MESSAGE_METADATA REQ\n         LEFT JOIN CORE.MESSAGE_METADATA L1 ON L1.REFERENCE_ID = REQ.ID\n         LEFT JOIN CORE.MESSAGE_CONTENT MC ON L1.ID = MC.ID\nWHERE L1.MESSAGE_TYPE = 'RESPONSE'\n  AND REQ.MESSAGE_TYPE = 'REQUEST'\n  AND REQ.CREATION_DATE < '2019-06-01 00:00:00'\n  AND MC.MODE IN ('MESSAGE', 'REJECT', 'ERROR');
+2020-01-08 11:32:57 [main] INFO  h2database - adapter:command slow query: 10 743 ms
+2020-01-08 11:33:00 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:2995 t:2422*/INSERT INTO CORE.RESP1_TMP\nSELECT ID\nFROM CORE.MESSAGE_METADATA\nWHERE REFERENCE_ID IN (SELECT ID FROM CORE.REQ_TMP);
+2020-01-08 11:33:00 [main] INFO  h2database - adapter:command slow query: 2 448 ms
+2020-01-08 11:33:00 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:2532 t:151*/INSERT INTO CORE.RESP2_TMP\nSELECT ID\nFROM CORE.MESSAGE_METADATA\nWHERE REFERENCE_ID IN (SELECT ID FROM CORE.RESP1_TMP);
+2020-01-08 11:33:00 [main] INFO  h2database - adapter:command slow query: 160 ms
+2020-01-08 11:33:04 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:352 t:4520*/INSERT INTO CORE.RESP1_TMP\nSELECT ID\nFROM CORE.MESSAGE_METADATA\nWHERE MESSAGE_TYPE = 'RESPONSE'\n   AND REFERENCE_ID IS NULL;
+2020-01-08 11:33:04 [main] INFO  h2database - adapter:command slow query: 4 521 ms
+2020-01-08 11:33:04 [main] INFO  ru.hemulen.controller.CleanController - Временные таблицы заполнены идентификаторами удаляемых записей.
+2020-01-08 11:33:04 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL t:38*/DELETE \nFROM CORE.ATTACHMENT_METADATA\nWHERE MESSAGE_METADATA_ID IN (\n    SELECT ID FROM CORE.RESP2_TMP\n    );
+2020-01-08 11:33:04 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:39 t:32*/DELETE \nFROM CORE.ATTACHMENT_METADATA\nWHERE MESSAGE_METADATA_ID IN (\n    SELECT ID FROM CORE.RESP1_TMP\n    );
+2020-01-08 11:33:05 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:2761 t:239*/DELETE \nFROM CORE.ATTACHMENT_METADATA\nWHERE MESSAGE_METADATA_ID IN (\n    SELECT ID FROM CORE.REQ_TMP\n    );
+2020-01-08 11:33:05 [main] INFO  h2database - adapter:command slow query: 390 ms
+2020-01-08 11:33:05 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы ATTACHMENT_METADATA.
+2020-01-08 11:33:05 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:2532 t:432*/DELETE\nFROM CORE.MESSAGE_CONTENT\nWHERE ID IN (\n    SELECT ID FROM CORE.RESP2_TMP\n    );
+2020-01-08 11:33:05 [main] INFO  h2database - adapter:command slow query: 634 ms
+2020-01-08 11:33:06 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:3347 t:349*/DELETE \nFROM CORE.MESSAGE_CONTENT\nWHERE ID IN (\n    SELECT ID FROM CORE.RESP1_TMP\n    );
+2020-01-08 11:33:06 [main] INFO  h2database - adapter:command slow query: 668 ms
+2020-01-08 11:33:07 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:2759 t:519*/DELETE\nFROM CORE.MESSAGE_CONTENT\nWHERE ID IN (\n    SELECT ID FROM CORE.REQ_TMP\n    );
+2020-01-08 11:33:07 [main] INFO  h2database - adapter:command slow query: 874 ms
+2020-01-08 11:33:07 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы MESSAGE_CONTENT.
+2020-01-08 11:33:08 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:2532 t:1165*/DELETE\nFROM CORE.MESSAGE_METADATA\nWHERE ID IN (\n    SELECT ID FROM CORE.RESP2_TMP\n    );
+2020-01-08 11:33:08 [main] INFO  h2database - adapter:command slow query: 1 278 ms
+2020-01-08 11:33:13 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:3347 t:5041*/DELETE \nFROM CORE.MESSAGE_METADATA\nWHERE ID IN (\n    SELECT ID FROM CORE.RESP1_TMP\n    );
+2020-01-08 11:33:13 [main] INFO  h2database - adapter:command slow query: 5 185 ms
+2020-01-08 11:33:14 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:2759 t:653*/DELETE\nFROM CORE.MESSAGE_METADATA\nWHERE ID IN (\n    SELECT ID FROM CORE.REQ_TMP\n    );
+2020-01-08 11:33:14 [main] INFO  h2database - adapter:command slow query: 723 ms
+2020-01-08 11:33:14 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы MESSAGE_METADATA.
+2020-01-08 11:33:15 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:2532 t:901*/DELETE\nFROM CORE.MESSAGE_STATE\nWHERE ID IN (\n    SELECT ID FROM CORE.RESP2_TMP\n    );
+2020-01-08 11:33:15 [main] INFO  h2database - adapter:command slow query: 970 ms
+2020-01-08 11:33:16 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:3347 t:853*/DELETE \nFROM CORE.MESSAGE_STATE\nWHERE ID IN (\n    SELECT ID FROM CORE.RESP1_TMP\n    );
+2020-01-08 11:33:16 [main] INFO  h2database - adapter:command slow query: 923 ms
+2020-01-08 11:33:17 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:2759 t:554*/DELETE\nFROM CORE.MESSAGE_STATE\nWHERE ID IN (\n    SELECT ID FROM CORE.REQ_TMP\n    );
+2020-01-08 11:33:17 [main] INFO  h2database - adapter:command slow query: 586 ms
+2020-01-08 11:33:17 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы MESSAGE_STATE.
+2020-01-08 11:33:17 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL t:1*/DROP TABLE IF EXISTS CORE.REQ_TMP;
+2020-01-08 11:33:17 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL */DROP TABLE IF EXISTS CORE.RESP2_TMP;
+2020-01-08 11:33:17 [main] INFO  ru.hemulen.controller.CleanController - Временные таблицы удалены.
+2020-01-08 11:33:17 [main] INFO  ru.hemulen.controller.CleanController - Очистка схемы CORE завершена.
+2020-01-08 11:33:17 [Thread-1] INFO  h2database - adapter:database closing C:/Temp/db/adapter from shutdown hook
+2020-01-08 11:45:35 [main] INFO  ru.hemulen.controller.CleanController - Начало очистки схемы CORE.
+2020-01-08 11:45:35 [main] INFO  ru.hemulen.controller.CleanController - Созданы временные таблицы.
+2020-01-08 11:46:36 [main] ERROR ru.hemulen.controller.CleanController - Произошла ошибка при обработке данных в схеме CORE.
+2020-01-08 11:46:36 [main] ERROR ru.hemulen.controller.CleanController - Нарушение уникального индекса или первичного ключа: "CORE.PRIMARY_KEY_6 ON CORE.REQ_TMP(ID) VALUES 1"
+Unique index or primary key violation: "CORE.PRIMARY_KEY_6 ON CORE.REQ_TMP(ID) VALUES 1"; SQL statement:
+INSERT INTO CORE.REQ_TMP
+SELECT DISTINCT REQ.ID
+FROM CORE.MESSAGE_METADATA REQ
+         LEFT JOIN CORE.MESSAGE_METADATA L1 ON L1.REFERENCE_ID = REQ.ID
+         LEFT JOIN CORE.MESSAGE_CONTENT MC ON L1.ID = MC.ID
+WHERE L1.MESSAGE_TYPE = 'RESPONSE'
+  AND REQ.MESSAGE_TYPE = 'REQUEST'
+  AND REQ.CREATION_DATE < '2019-08-01 00:00:00'
+  AND MC.MODE IN ('MESSAGE', 'REJECT', 'ERROR'); [23505-199]
+2020-01-08 12:01:17 [main] INFO  h2database - adapter:database opening C:/Temp/db/adapter (build 199)
+2020-01-08 12:01:17 [main] INFO  h2database - jdbc 
+/**/Connection conn0 = DriverManager.getConnection("jdbc:h2:file:C:\\Temp\\db\\adapter;IFEXISTS=TRUE;AUTO_SERVER=TRUE;TRACE_LEVEL_FILE=4", "ADAPTER", "");
+2020-01-08 12:01:17 [main] INFO  ru.hemulen.controller.CleanController - Начало очистки схемы CORE.
+2020-01-08 12:01:17 [main] INFO  ru.hemulen.controller.CleanController - Созданы временные таблицы.
+2020-01-08 12:07:37 [main] INFO  h2database - jdbc exception
+org.h2.jdbc.JdbcSQLIntegrityConstraintViolationException: Нарушение уникального индекса или первичного ключа: "PRIMARY_KEY_6 ON CORE.REQ_TMP(ID) VALUES ('e20d649f-0d99-4d53-a12a-3aa7d0285894', 9)"
+Unique index or primary key violation: "PRIMARY_KEY_6 ON CORE.REQ_TMP(ID) VALUES ('e20d649f-0d99-4d53-a12a-3aa7d0285894', 9)"; SQL statement:
+INSERT INTO CORE.REQ_TMP
+SELECT DISTINCT REQ.ID
+FROM CORE.MESSAGE_METADATA REQ
+         LEFT JOIN CORE.MESSAGE_METADATA L1 ON L1.REFERENCE_ID = REQ.ID
+         LEFT JOIN CORE.MESSAGE_CONTENT MC ON L1.ID = MC.ID
+WHERE L1.MESSAGE_TYPE = 'RESPONSE'
+  AND REQ.MESSAGE_TYPE = 'REQUEST'
+  AND REQ.CREATION_DATE < '2019-08-01 00:00:00'
+  AND MC.MODE IN ('MESSAGE', 'REJECT', 'ERROR'); [23505-199]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:457) ~[h2-1.4.199.jar:1.4.199]
+	at org.h2.engine.SessionRemote.done(SessionRemote.java:607) ~[h2-1.4.199.jar:1.4.199]
+	at org.h2.command.CommandRemote.executeUpdate(CommandRemote.java:237) ~[h2-1.4.199.jar:1.4.199]
+	at org.h2.jdbc.JdbcStatement.executeUpdateInternal(JdbcStatement.java:169) ~[h2-1.4.199.jar:1.4.199]
+	at org.h2.jdbc.JdbcStatement.executeUpdate(JdbcStatement.java:126) [h2-1.4.199.jar:1.4.199]
+	at ru.hemulen.model.CORE.fillTempTables(CORE.java:59) [classes/:?]
+	at ru.hemulen.controller.CleanController.clean(CleanController.java:61) [classes/:?]
+	at ru.hemulen.Main.main(Main.java:54) [classes/:?]
+2020-01-08 12:07:37 [main] ERROR ru.hemulen.controller.CleanController - Произошла ошибка при обработке данных в схеме CORE.
+2020-01-08 12:07:37 [main] ERROR ru.hemulen.controller.CleanController - Нарушение уникального индекса или первичного ключа: "PRIMARY_KEY_6 ON CORE.REQ_TMP(ID) VALUES ('e20d649f-0d99-4d53-a12a-3aa7d0285894', 9)"
+Unique index or primary key violation: "PRIMARY_KEY_6 ON CORE.REQ_TMP(ID) VALUES ('e20d649f-0d99-4d53-a12a-3aa7d0285894', 9)"; SQL statement:
+INSERT INTO CORE.REQ_TMP
+SELECT DISTINCT REQ.ID
+FROM CORE.MESSAGE_METADATA REQ
+         LEFT JOIN CORE.MESSAGE_METADATA L1 ON L1.REFERENCE_ID = REQ.ID
+         LEFT JOIN CORE.MESSAGE_CONTENT MC ON L1.ID = MC.ID
+WHERE L1.MESSAGE_TYPE = 'RESPONSE'
+  AND REQ.MESSAGE_TYPE = 'REQUEST'
+  AND REQ.CREATION_DATE < '2019-08-01 00:00:00'
+  AND MC.MODE IN ('MESSAGE', 'REJECT', 'ERROR'); [23505-199]
+2020-01-08 12:54:34 [main] INFO  h2database - adapter:database opening C:/Temp/db/adapter (build 199)
+2020-01-08 12:55:03 [main] INFO  h2database - adapter:database opened C:/Temp/db/adapter
+2020-01-08 12:55:03 [main] INFO  h2database - adapter:database connecting session #3 to C:/Temp/db/adapter
+2020-01-08 12:55:03 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL */SET AUTO_SERVER TRUE;
+2020-01-08 12:55:03 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL */SET TRACE_LEVEL_FILE 4;
+2020-01-08 12:55:03 [main] INFO  h2database - adapter:jdbc[3] 
+/**/Connection conn1 = DriverManager.getConnection("jdbc:h2:file:C:\\Temp\\db\\adapter;IFEXISTS=TRUE;AUTO_SERVER=TRUE;TRACE_LEVEL_FILE=4", "ADAPTER", "");
+2020-01-08 12:55:03 [main] INFO  ru.hemulen.controller.CleanController - Начало очистки схемы CORE.
+2020-01-08 12:55:03 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL t:2*/DROP TABLE IF EXISTS CORE.REQ_TMP;
+2020-01-08 12:55:03 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL */DROP TABLE IF EXISTS CORE.RESP2_TMP;
+2020-01-08 12:55:03 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL */CREATE TABLE CORE.REQ_TMP (ID UUID NOT NULL, constraint REQ_TMP_ID_PK primary key (ID));
+2020-01-08 12:55:03 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL */CREATE TABLE CORE.RESP2_TMP (ID UUID NOT NULL, constraint RESP2_TMP_ID_PK primary key (ID));
+2020-01-08 12:55:03 [main] INFO  ru.hemulen.controller.CleanController - Созданы временные таблицы.
+2020-01-08 12:55:55 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:10 t:51431*/INSERT INTO CORE.REQ_TMP\nSELECT DISTINCT REQ.ID\nFROM CORE.MESSAGE_METADATA REQ\n         LEFT JOIN CORE.MESSAGE_METADATA L1 ON L1.REFERENCE_ID = REQ.ID\n         LEFT JOIN CORE.MESSAGE_METADATA L2 ON L2.REFERENCE_ID = L1.ID\n         LEFT JOIN CORE.MESSAGE_CONTENT MC ON L2.ID = MC.ID\nWHERE L2.MESSAGE_TYPE = 'RESPONSE'\n  AND L1.MESSAGE_TYPE = 'RESPONSE'\n  AND REQ.MESSAGE_TYPE = 'REQUEST'\n  AND REQ.CREATION_DATE < '2019-08-01 00:00:00'\n  AND MC.MODE IN ('MESSAGE', 'REJECT', 'ERROR');
+2020-01-08 12:55:55 [main] INFO  h2database - adapter:command slow query: 51 432 ms
+2020-01-08 12:56:08 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:7397 t:13378*/INSERT INTO CORE.REQ_TMP\nSELECT DISTINCT REQ.ID\nFROM CORE.MESSAGE_METADATA REQ\n         LEFT JOIN CORE.MESSAGE_METADATA L1 ON L1.REFERENCE_ID = REQ.ID\n         LEFT JOIN CORE.MESSAGE_CONTENT MC ON L1.ID = MC.ID\nWHERE L1.MESSAGE_TYPE = 'RESPONSE'\n  AND REQ.MESSAGE_TYPE = 'REQUEST'\n  AND REQ.CREATION_DATE < '2019-08-01 00:00:00'\n  AND MC.MODE IN ('MESSAGE', 'REJECT', 'ERROR')\n  AND REQ.ID NOT IN (SELECT ID FROM CORE.REQ_TMP);
+2020-01-08 12:56:08 [main] INFO  h2database - adapter:command slow query: 13 424 ms
+2020-01-08 12:56:09 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:7627 t:450*/INSERT INTO CORE.RESP1_TMP\nSELECT ID\nFROM CORE.MESSAGE_METADATA\nWHERE REFERENCE_ID IN (SELECT ID FROM CORE.REQ_TMP);
+2020-01-08 12:56:09 [main] INFO  h2database - adapter:command slow query: 499 ms
+2020-01-08 12:56:09 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:7187 t:269*/INSERT INTO CORE.RESP2_TMP\nSELECT ID\nFROM CORE.MESSAGE_METADATA\nWHERE REFERENCE_ID IN (SELECT ID FROM CORE.RESP1_TMP);
+2020-01-08 12:56:09 [main] INFO  h2database - adapter:command slow query: 288 ms
+2020-01-08 12:56:14 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL t:4411*/INSERT INTO CORE.RESP1_TMP\nSELECT ID\nFROM CORE.MESSAGE_METADATA\nWHERE MESSAGE_TYPE = 'RESPONSE'\n   AND REFERENCE_ID IS NULL;
+2020-01-08 12:56:14 [main] INFO  h2database - adapter:command slow query: 4 411 ms
+2020-01-08 12:56:14 [main] INFO  ru.hemulen.controller.CleanController - Временные таблицы заполнены идентификаторами удаляемых записей.
+2020-01-08 12:56:14 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL t:47*/DELETE \nFROM CORE.ATTACHMENT_METADATA\nWHERE MESSAGE_METADATA_ID IN (\n    SELECT ID FROM CORE.RESP2_TMP\n    );
+2020-01-08 12:56:14 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL t:20*/DELETE \nFROM CORE.ATTACHMENT_METADATA\nWHERE MESSAGE_METADATA_ID IN (\n    SELECT ID FROM CORE.RESP1_TMP\n    );
+2020-01-08 12:56:14 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:7407 t:535*/DELETE \nFROM CORE.ATTACHMENT_METADATA\nWHERE MESSAGE_METADATA_ID IN (\n    SELECT ID FROM CORE.REQ_TMP\n    );
+2020-01-08 12:56:14 [main] INFO  h2database - adapter:command slow query: 714 ms
+2020-01-08 12:56:14 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы ATTACHMENT_METADATA.
+2020-01-08 12:56:15 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:7187 t:500*/DELETE\nFROM CORE.MESSAGE_CONTENT\nWHERE ID IN (\n    SELECT ID FROM CORE.RESP2_TMP\n    );
+2020-01-08 12:56:15 [main] INFO  h2database - adapter:command slow query: 889 ms
+2020-01-08 12:56:16 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:7627 t:375*/DELETE \nFROM CORE.MESSAGE_CONTENT\nWHERE ID IN (\n    SELECT ID FROM CORE.RESP1_TMP\n    );
+2020-01-08 12:56:16 [main] INFO  h2database - adapter:command slow query: 1 126 ms
+2020-01-08 12:56:17 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:7407 t:565*/DELETE\nFROM CORE.MESSAGE_CONTENT\nWHERE ID IN (\n    SELECT ID FROM CORE.REQ_TMP\n    );
+2020-01-08 12:56:17 [main] INFO  h2database - adapter:command slow query: 907 ms
+2020-01-08 12:56:17 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы MESSAGE_CONTENT.
+2020-01-08 12:56:21 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:7187 t:4261*/DELETE\nFROM CORE.MESSAGE_METADATA\nWHERE ID IN (\n    SELECT ID FROM CORE.RESP2_TMP\n    );
+2020-01-08 12:56:22 [main] INFO  h2database - adapter:command slow query: 4 785 ms
+2020-01-08 12:56:24 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:7627 t:1747*/DELETE \nFROM CORE.MESSAGE_METADATA\nWHERE ID IN (\n    SELECT ID FROM CORE.RESP1_TMP\n    );
+2020-01-08 12:56:24 [main] INFO  h2database - adapter:command slow query: 2 387 ms
+2020-01-08 12:56:25 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:7407 t:1077*/DELETE\nFROM CORE.MESSAGE_METADATA\nWHERE ID IN (\n    SELECT ID FROM CORE.REQ_TMP\n    );
+2020-01-08 12:56:26 [main] INFO  h2database - adapter:command slow query: 1 507 ms
+2020-01-08 12:56:26 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы MESSAGE_METADATA.
+2020-01-08 12:56:28 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:7187 t:1708*/DELETE\nFROM CORE.MESSAGE_STATE\nWHERE ID IN (\n    SELECT ID FROM CORE.RESP2_TMP\n    );
+2020-01-08 12:56:28 [main] INFO  h2database - adapter:command slow query: 1 827 ms
+2020-01-08 12:56:29 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:7627 t:1383*/DELETE \nFROM CORE.MESSAGE_STATE\nWHERE ID IN (\n    SELECT ID FROM CORE.RESP1_TMP\n    );
+2020-01-08 12:56:29 [main] INFO  h2database - adapter:command slow query: 1 469 ms
+2020-01-08 12:56:30 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:7407 t:747*/DELETE\nFROM CORE.MESSAGE_STATE\nWHERE ID IN (\n    SELECT ID FROM CORE.REQ_TMP\n    );
+2020-01-08 12:56:30 [main] INFO  h2database - adapter:command slow query: 823 ms
+2020-01-08 12:56:30 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы MESSAGE_STATE.
+2020-01-08 12:56:30 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL */DROP TABLE IF EXISTS CORE.REQ_TMP;
+2020-01-08 12:56:30 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL */DROP TABLE IF EXISTS CORE.RESP2_TMP;
+2020-01-08 12:56:30 [main] INFO  ru.hemulen.controller.CleanController - Временные таблицы удалены.
+2020-01-08 12:56:30 [main] INFO  ru.hemulen.controller.CleanController - Очистка схемы CORE завершена.
+2020-01-08 12:56:30 [Thread-1] INFO  h2database - adapter:database closing C:/Temp/db/adapter from shutdown hook
+2020-01-08 13:02:04 [main] INFO  h2database - adapter:database opening C:/Temp/db/adapter (build 199)
+2020-01-08 13:02:29 [main] INFO  h2database - adapter:database opened C:/Temp/db/adapter
+2020-01-08 13:02:29 [main] INFO  h2database - adapter:database connecting session #3 to C:/Temp/db/adapter
+2020-01-08 13:02:29 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL */SET AUTO_SERVER TRUE;
+2020-01-08 13:02:29 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL */SET TRACE_LEVEL_FILE 4;
+2020-01-08 13:02:29 [main] INFO  h2database - adapter:jdbc[3] 
+/**/Connection conn1 = DriverManager.getConnection("jdbc:h2:file:C:\\Temp\\db\\adapter;IFEXISTS=TRUE;AUTO_SERVER=TRUE;TRACE_LEVEL_FILE=4", "ADAPTER", "");
+2020-01-08 13:02:29 [main] INFO  ru.hemulen.controller.CleanController - Начало очистки схемы CORE.
+2020-01-08 13:02:29 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL */DROP TABLE IF EXISTS CORE.REQ_TMP;
+2020-01-08 13:02:29 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL */DROP TABLE IF EXISTS CORE.RESP2_TMP;
+2020-01-08 13:02:29 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL t:1*/CREATE TABLE CORE.REQ_TMP (ID UUID NOT NULL, constraint REQ_TMP_ID_PK primary key (ID));
+2020-01-08 13:02:29 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL */CREATE TABLE CORE.RESP2_TMP (ID UUID NOT NULL, constraint RESP2_TMP_ID_PK primary key (ID));
+2020-01-08 13:02:29 [main] INFO  ru.hemulen.controller.CleanController - Созданы временные таблицы.
+2020-01-08 13:03:18 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:10 t:49148*/INSERT INTO CORE.REQ_TMP\nSELECT DISTINCT REQ.ID\nFROM CORE.MESSAGE_METADATA REQ\n         LEFT JOIN CORE.MESSAGE_METADATA L1 ON L1.REFERENCE_ID = REQ.ID\n         LEFT JOIN CORE.MESSAGE_METADATA L2 ON L2.REFERENCE_ID = L1.ID\n         LEFT JOIN CORE.MESSAGE_CONTENT MC ON L2.ID = MC.ID\nWHERE L2.MESSAGE_TYPE = 'RESPONSE'\n  AND L1.MESSAGE_TYPE = 'RESPONSE'\n  AND REQ.MESSAGE_TYPE = 'REQUEST'\n  AND REQ.CREATION_DATE < '2019-10-01 00:00:00'\n  AND MC.MODE IN ('MESSAGE', 'REJECT', 'ERROR');
+2020-01-08 13:03:18 [main] INFO  h2database - adapter:command slow query: 49 149 ms
+2020-01-08 13:03:29 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:8697 t:11187*/INSERT INTO CORE.REQ_TMP\nSELECT DISTINCT REQ.ID\nFROM CORE.MESSAGE_METADATA REQ\n         LEFT JOIN CORE.MESSAGE_METADATA L1 ON L1.REFERENCE_ID = REQ.ID\n         LEFT JOIN CORE.MESSAGE_CONTENT MC ON L1.ID = MC.ID\nWHERE L1.MESSAGE_TYPE = 'RESPONSE'\n  AND REQ.MESSAGE_TYPE = 'REQUEST'\n  AND REQ.CREATION_DATE < '2019-10-01 00:00:00'\n  AND MC.MODE IN ('MESSAGE', 'REJECT', 'ERROR')\n  AND REQ.ID NOT IN (SELECT ID FROM CORE.REQ_TMP);
+2020-01-08 13:03:29 [main] INFO  h2database - adapter:command slow query: 11 239 ms
+2020-01-08 13:03:30 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:8950 t:449*/INSERT INTO CORE.RESP1_TMP\nSELECT ID\nFROM CORE.MESSAGE_METADATA\nWHERE REFERENCE_ID IN (SELECT ID FROM CORE.REQ_TMP);
+2020-01-08 13:03:30 [main] INFO  h2database - adapter:command slow query: 479 ms
+2020-01-08 13:03:30 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:8465 t:244*/INSERT INTO CORE.RESP2_TMP\nSELECT ID\nFROM CORE.MESSAGE_METADATA\nWHERE REFERENCE_ID IN (SELECT ID FROM CORE.RESP1_TMP);
+2020-01-08 13:03:30 [main] INFO  h2database - adapter:command slow query: 265 ms
+2020-01-08 13:03:34 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL t:4099*/INSERT INTO CORE.RESP1_TMP\nSELECT ID\nFROM CORE.MESSAGE_METADATA\nWHERE MESSAGE_TYPE = 'RESPONSE'\n   AND REFERENCE_ID IS NULL;
+2020-01-08 13:03:34 [main] INFO  h2database - adapter:command slow query: 4 100 ms
+2020-01-08 13:03:34 [main] INFO  ru.hemulen.controller.CleanController - Временные таблицы заполнены идентификаторами удаляемых записей.
+2020-01-08 13:03:34 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL t:52*/DELETE \nFROM CORE.ATTACHMENT_METADATA\nWHERE MESSAGE_METADATA_ID IN (\n    SELECT ID FROM CORE.RESP2_TMP\n    );
+2020-01-08 13:03:34 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL t:24*/DELETE \nFROM CORE.ATTACHMENT_METADATA\nWHERE MESSAGE_METADATA_ID IN (\n    SELECT ID FROM CORE.RESP1_TMP\n    );
+2020-01-08 13:03:35 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:8698 t:619*/DELETE \nFROM CORE.ATTACHMENT_METADATA\nWHERE MESSAGE_METADATA_ID IN (\n    SELECT ID FROM CORE.REQ_TMP\n    );
+2020-01-08 13:03:35 [main] INFO  h2database - adapter:command slow query: 758 ms
+2020-01-08 13:03:35 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы ATTACHMENT_METADATA.
+2020-01-08 13:03:36 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:8465 t:493*/DELETE\nFROM CORE.MESSAGE_CONTENT\nWHERE ID IN (\n    SELECT ID FROM CORE.RESP2_TMP\n    );
+2020-01-08 13:03:36 [main] INFO  h2database - adapter:command slow query: 959 ms
+2020-01-08 13:03:36 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:8950 t:413*/DELETE \nFROM CORE.MESSAGE_CONTENT\nWHERE ID IN (\n    SELECT ID FROM CORE.RESP1_TMP\n    );
+2020-01-08 13:03:37 [main] INFO  h2database - adapter:command slow query: 1 278 ms
+2020-01-08 13:03:38 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:8707 t:669*/DELETE\nFROM CORE.MESSAGE_CONTENT\nWHERE ID IN (\n    SELECT ID FROM CORE.REQ_TMP\n    );
+2020-01-08 13:03:41 [main] INFO  h2database - adapter:command slow query: 4 128 ms
+2020-01-08 13:03:41 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы MESSAGE_CONTENT.
+2020-01-08 13:03:44 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:8465 t:2769*/DELETE\nFROM CORE.MESSAGE_METADATA\nWHERE ID IN (\n    SELECT ID FROM CORE.RESP2_TMP\n    );
+2020-01-08 13:03:45 [main] INFO  h2database - adapter:command slow query: 3 380 ms
+2020-01-08 13:03:47 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:8950 t:2173*/DELETE \nFROM CORE.MESSAGE_METADATA\nWHERE ID IN (\n    SELECT ID FROM CORE.RESP1_TMP\n    );
+2020-01-08 13:03:48 [main] INFO  h2database - adapter:command slow query: 2 929 ms
+2020-01-08 13:03:49 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:8707 t:1320*/DELETE\nFROM CORE.MESSAGE_METADATA\nWHERE ID IN (\n    SELECT ID FROM CORE.REQ_TMP\n    );
+2020-01-08 13:03:50 [main] INFO  h2database - adapter:command slow query: 1 784 ms
+2020-01-08 13:03:50 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы MESSAGE_METADATA.
+2020-01-08 13:03:53 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:8465 t:3356*/DELETE\nFROM CORE.MESSAGE_STATE\nWHERE ID IN (\n    SELECT ID FROM CORE.RESP2_TMP\n    );
+2020-01-08 13:03:53 [main] INFO  h2database - adapter:command slow query: 3 467 ms
+2020-01-08 13:03:54 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:8950 t:1095*/DELETE \nFROM CORE.MESSAGE_STATE\nWHERE ID IN (\n    SELECT ID FROM CORE.RESP1_TMP\n    );
+2020-01-08 13:03:54 [main] INFO  h2database - adapter:command slow query: 1 305 ms
+2020-01-08 13:03:55 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:8707 t:764*/DELETE\nFROM CORE.MESSAGE_STATE\nWHERE ID IN (\n    SELECT ID FROM CORE.REQ_TMP\n    );
+2020-01-08 13:03:55 [main] INFO  h2database - adapter:command slow query: 848 ms
+2020-01-08 13:03:55 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы MESSAGE_STATE.
+2020-01-08 13:03:55 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL t:1*/DROP TABLE IF EXISTS CORE.REQ_TMP;
+2020-01-08 13:03:55 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL */DROP TABLE IF EXISTS CORE.RESP2_TMP;
+2020-01-08 13:03:55 [main] INFO  ru.hemulen.controller.CleanController - Временные таблицы удалены.
+2020-01-08 13:03:55 [main] INFO  ru.hemulen.controller.CleanController - Очистка схемы CORE завершена.
+2020-01-08 13:03:55 [Thread-1] INFO  h2database - adapter:database closing C:/Temp/db/adapter from shutdown hook
+2020-01-08 13:03:55 [Thread-1] INFO  h2database - adapter:database disconnecting session #3
+2020-01-08 13:03:55 [Thread-1] INFO  h2database - adapter:database disconnected session #3
+2020-01-08 13:04:55 [main] INFO  h2database - adapter:database opening C:/Temp/db/adapter (build 199)
+2020-01-08 13:05:13 [main] INFO  h2database - adapter:database opening C:/Temp/db/adapter (build 199)
+2020-01-08 13:05:39 [main] INFO  h2database - adapter:database opened C:/Temp/db/adapter
+2020-01-08 13:05:39 [main] INFO  h2database - adapter:database connecting session #3 to C:/Temp/db/adapter
+2020-01-08 13:05:39 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL */SET AUTO_SERVER TRUE;
+2020-01-08 13:05:39 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL */SET TRACE_LEVEL_FILE 4;
+2020-01-08 13:05:39 [main] INFO  h2database - adapter:jdbc[3] 
+/**/Connection conn1 = DriverManager.getConnection("jdbc:h2:file:C:\\Temp\\db\\adapter;IFEXISTS=TRUE;AUTO_SERVER=TRUE;TRACE_LEVEL_FILE=4", "ADAPTER", "");
+2020-01-08 13:05:39 [main] INFO  ru.hemulen.controller.CleanController - Начало очистки схемы CORE.
+2020-01-08 13:05:39 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL */DROP TABLE IF EXISTS CORE.REQ_TMP;
+2020-01-08 13:05:39 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL */DROP TABLE IF EXISTS CORE.RESP2_TMP;
+2020-01-08 13:05:39 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL t:1*/CREATE TABLE CORE.REQ_TMP (ID UUID NOT NULL, constraint REQ_TMP_ID_PK primary key (ID));
+2020-01-08 13:05:39 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL */CREATE TABLE CORE.RESP2_TMP (ID UUID NOT NULL, constraint RESP2_TMP_ID_PK primary key (ID));
+2020-01-08 13:05:39 [main] INFO  ru.hemulen.controller.CleanController - Созданы временные таблицы.
+2020-01-08 13:06:46 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:67 t:66562*/INSERT INTO CORE.REQ_TMP\nSELECT DISTINCT REQ.ID\nFROM CORE.MESSAGE_METADATA REQ\n         LEFT JOIN CORE.MESSAGE_METADATA L1 ON L1.REFERENCE_ID = REQ.ID\n         LEFT JOIN CORE.MESSAGE_METADATA L2 ON L2.REFERENCE_ID = L1.ID\n         LEFT JOIN CORE.MESSAGE_CONTENT MC ON L2.ID = MC.ID\nWHERE L2.MESSAGE_TYPE = 'RESPONSE'\n  AND L1.MESSAGE_TYPE = 'RESPONSE'\n  AND REQ.MESSAGE_TYPE = 'REQUEST'\n  AND REQ.CREATION_DATE < '2019-12-01 00:00:00'\n  AND MC.MODE IN ('MESSAGE', 'REJECT', 'ERROR');
+2020-01-08 13:06:46 [main] INFO  h2database - adapter:command slow query: 66 564 ms
+2020-01-08 13:07:12 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:197738 t:26555*/INSERT INTO CORE.REQ_TMP\nSELECT DISTINCT REQ.ID\nFROM CORE.MESSAGE_METADATA REQ\n         LEFT JOIN CORE.MESSAGE_METADATA L1 ON L1.REFERENCE_ID = REQ.ID\n         LEFT JOIN CORE.MESSAGE_CONTENT MC ON L1.ID = MC.ID\nWHERE L1.MESSAGE_TYPE = 'RESPONSE'\n  AND REQ.MESSAGE_TYPE = 'REQUEST'\n  AND REQ.CREATION_DATE < '2019-12-01 00:00:00'\n  AND MC.MODE IN ('MESSAGE', 'REJECT', 'ERROR')\n  AND REQ.ID NOT IN (SELECT ID FROM CORE.REQ_TMP);
+2020-01-08 13:07:13 [main] INFO  h2database - adapter:command slow query: 27 175 ms
+2020-01-08 13:07:31 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:378053 t:17977*/INSERT INTO CORE.RESP1_TMP\nSELECT ID\nFROM CORE.MESSAGE_METADATA\nWHERE REFERENCE_ID IN (SELECT ID FROM CORE.REQ_TMP);
+2020-01-08 13:07:36 [main] INFO  h2database - adapter:command slow query: 23 142 ms
+2020-01-08 13:07:38 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:16425 t:2233*/INSERT INTO CORE.RESP2_TMP\nSELECT ID\nFROM CORE.MESSAGE_METADATA\nWHERE REFERENCE_ID IN (SELECT ID FROM CORE.RESP1_TMP);
+2020-01-08 13:07:38 [main] INFO  h2database - adapter:command slow query: 2 264 ms
+2020-01-08 13:07:42 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL t:4064*/INSERT INTO CORE.RESP1_TMP\nSELECT ID\nFROM CORE.MESSAGE_METADATA\nWHERE MESSAGE_TYPE = 'RESPONSE'\n   AND REFERENCE_ID IS NULL;
+2020-01-08 13:07:42 [main] INFO  h2database - adapter:command slow query: 4 065 ms
+2020-01-08 13:07:42 [main] INFO  ru.hemulen.controller.CleanController - Временные таблицы заполнены идентификаторами удаляемых записей.
+2020-01-08 13:07:42 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL t:62*/DELETE \nFROM CORE.ATTACHMENT_METADATA\nWHERE MESSAGE_METADATA_ID IN (\n    SELECT ID FROM CORE.RESP2_TMP\n    );
+2020-01-08 13:07:43 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL t:1023*/DELETE \nFROM CORE.ATTACHMENT_METADATA\nWHERE MESSAGE_METADATA_ID IN (\n    SELECT ID FROM CORE.RESP1_TMP\n    );
+2020-01-08 13:07:43 [main] INFO  h2database - adapter:command slow query: 1 024 ms
+2020-01-08 13:07:45 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:16905 t:1861*/DELETE \nFROM CORE.ATTACHMENT_METADATA\nWHERE MESSAGE_METADATA_ID IN (\n    SELECT ID FROM CORE.REQ_TMP\n    );
+2020-01-08 13:07:46 [main] INFO  h2database - adapter:command slow query: 2 305 ms
+2020-01-08 13:07:46 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы ATTACHMENT_METADATA.
+2020-01-08 13:07:47 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:16425 t:1222*/DELETE\nFROM CORE.MESSAGE_CONTENT\nWHERE ID IN (\n    SELECT ID FROM CORE.RESP2_TMP\n    );
+2020-01-08 13:07:50 [main] INFO  h2database - adapter:command slow query: 4 483 ms
+2020-01-08 13:08:34 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:378053 t:44068*/DELETE \nFROM CORE.MESSAGE_CONTENT\nWHERE ID IN (\n    SELECT ID FROM CORE.RESP1_TMP\n    );
+2020-01-08 13:09:37 [main] INFO  h2database - adapter:command slow query: 106 704 ms
+2020-01-08 13:09:50 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:197805 t:13486*/DELETE\nFROM CORE.MESSAGE_CONTENT\nWHERE ID IN (\n    SELECT ID FROM CORE.REQ_TMP\n    );
+2020-01-08 13:10:11 [main] INFO  h2database - adapter:command slow query: 33 741 ms
+2020-01-08 13:10:11 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы MESSAGE_CONTENT.
+2020-01-08 13:10:22 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:16425 t:11451*/DELETE\nFROM CORE.MESSAGE_METADATA\nWHERE ID IN (\n    SELECT ID FROM CORE.RESP2_TMP\n    );
+2020-01-08 13:10:24 [main] INFO  h2database - adapter:command slow query: 13 110 ms
+2020-01-08 13:12:48 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:378053 t:144524*/DELETE \nFROM CORE.MESSAGE_METADATA\nWHERE ID IN (\n    SELECT ID FROM CORE.RESP1_TMP\n    );
+2020-01-08 13:15:31 [main] INFO  h2database - adapter:command slow query: 307 387 ms
+2020-01-08 13:16:30 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:197805 t:59155*/DELETE\nFROM CORE.MESSAGE_METADATA\nWHERE ID IN (\n    SELECT ID FROM CORE.REQ_TMP\n    );
+2020-01-08 13:17:22 [main] INFO  h2database - adapter:command slow query: 110 776 ms
+2020-01-08 13:17:22 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы MESSAGE_METADATA.
+2020-01-08 13:17:27 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:16425 t:4548*/DELETE\nFROM CORE.MESSAGE_STATE\nWHERE ID IN (\n    SELECT ID FROM CORE.RESP2_TMP\n    );
+2020-01-08 13:17:27 [main] INFO  h2database - adapter:command slow query: 5 029 ms
+2020-01-08 13:18:19 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:378053 t:52011*/DELETE \nFROM CORE.MESSAGE_STATE\nWHERE ID IN (\n    SELECT ID FROM CORE.RESP1_TMP\n    );
+2020-01-08 13:18:32 [main] INFO  h2database - adapter:command slow query: 64 549 ms
+2020-01-08 13:18:46 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL #:197805 t:13918*/DELETE\nFROM CORE.MESSAGE_STATE\nWHERE ID IN (\n    SELECT ID FROM CORE.REQ_TMP\n    );
+2020-01-08 13:18:51 [main] INFO  h2database - adapter:command slow query: 19 286 ms
+2020-01-08 13:18:51 [main] INFO  ru.hemulen.controller.CleanController - Удалены записи из таблицы MESSAGE_STATE.
+2020-01-08 13:18:51 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL t:2*/DROP TABLE IF EXISTS CORE.REQ_TMP;
+2020-01-08 13:18:51 [main] INFO  h2database - adapter:jdbc[3] 
+/*SQL */DROP TABLE IF EXISTS CORE.RESP2_TMP;
+2020-01-08 13:18:51 [main] INFO  ru.hemulen.controller.CleanController - Временные таблицы удалены.
+2020-01-08 13:18:51 [main] INFO  ru.hemulen.controller.CleanController - Очистка схемы CORE завершена.
+2020-01-08 13:18:51 [Thread-1] INFO  h2database - adapter:database closing C:/Temp/db/adapter from shutdown hook
+2020-01-08 13:18:51 [Thread-1] INFO  h2database - adapter:database disconnecting session #3
+2020-01-08 13:18:51 [Thread-1] INFO  h2database - adapter:database disconnected session #3
