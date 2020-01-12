@@ -17,7 +17,7 @@ public class DBConnector {
     private UI ui;
 
     public DBConnector(String dbName, String user, String pass, boolean isUIPresent, String threshold) throws SQLException {
-        String url = String.format("jdbc:h2:file:%s;IFEXISTS=TRUE;AUTO_SERVER=TRUE;TRACE_LEVEL_FILE=4", dbName);
+        String url = String.format("jdbc:h2:file:%s;IFEXISTS=TRUE;AUTO_SERVER=TRUE", dbName);
         try {
             Class.forName("org.h2.Driver");
             connection = DriverManager.getConnection(url, user, pass);
@@ -36,8 +36,8 @@ public class DBConnector {
         }
     }
 
-    public void close() {
-        core.close();
+    public void close(boolean defragDBOnExit, boolean compactDBOnExit) {
+        core.close(defragDBOnExit, compactDBOnExit);
     }
 
     public CORE getCore() {

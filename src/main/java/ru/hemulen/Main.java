@@ -15,6 +15,9 @@ import java.util.Properties;
 public class Main {
     private static final String configName = "./config/config.ini";
     private static String mode;
+    private static boolean defragDBOnExit = false;
+    private static boolean compactDBOnExit = false;
+
 
     public static void main(String[] args) {
         Properties props = new Properties();
@@ -29,6 +32,13 @@ public class Main {
             mode = "clean";     // Если не указан путь к базе с архивом, то выполняется очистка текущей базы
         } else {
             mode = "archive";   // Иначе выполняется архивирование в указанную базу
+        }
+        if (props.getProperty("DEFRAG_DB_ON_EXIT") != null) {
+            defragDBOnExit = Boolean.parseBoolean(props.getProperty("DEFRAG_DB_ON_EXIT"));
+        }
+        if (props.getProperty("COMPACT_DB_ON_EXIT") != null && !defragDBOnExit) {
+            // Если параметр DEFRAG_DB_ON_EXIT = TRUE, то параметр COMPACT_DB_ON_EXIT игнорируется
+            compactDBOnExit = Boolean.parseBoolean(props.getProperty("COMPACT_DB_ON_EXIT"));
         }
         String threshold = "";
         if (args.length != 0) {
@@ -52,12 +62,12 @@ public class Main {
             case "clean":
                 CleanController cleaner = new CleanController(props, threshold);
                 cleaner.clean();
-                cleaner.close();
+                cleaner.close(defragDBOnExit, compactDBOnExit);
                 break;
             case "archive":
-                ArchiveController archiver = new ArchiveController(props);
+                ArchiveController archiver = new ArchiveController(props, threshold);
                 archiver.archive();
-                archiver.close();
+                archiver.close(defragDBOnExit, compactDBOnExit);
                 break;
         }
     }

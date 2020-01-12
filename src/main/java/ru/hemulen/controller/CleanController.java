@@ -26,7 +26,7 @@ public class CleanController {
         String user = props.getProperty("USER");
         String pass = props.getProperty("PASS");
         isUIPresent = Boolean.parseBoolean(props.getProperty("IS_UI_PRESENT"));
-        if (threshold.isEmpty()) {
+        if (threshold.trim().isEmpty()) {
             // Если конкретная дата не передана в параметре, то
             // вычисляем штамп времени, после которого данные останутся в базе:
             // - получаем текущее время
@@ -102,7 +102,7 @@ public class CleanController {
         }
     }
 
-    public void close() {
-        source.close();
+    public void close(boolean defragDBOnExit, boolean compactDBOnExit) {
+        source.close(defragDBOnExit, compactDBOnExit);
     }
 }

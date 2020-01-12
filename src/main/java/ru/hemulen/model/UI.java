@@ -1,18 +1,18 @@
 package ru.hemulen.model;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 /**
  * Класс содержит методы для манипулирования данными в схеме UI
  */
 public class UI {
+    private Connection connection;
     private Statement statement;
     private String threshold;
 
     public UI(Connection connection, String threshold) throws SQLException {
-        statement = connection.createStatement();
+        this.connection = connection;
+        statement = this.connection.createStatement();
         this.threshold = threshold;
     }
 
@@ -99,4 +99,128 @@ public class UI {
         statement.executeUpdate(sql);
     }
 
+    public ResultSet getInquiryVersion() throws SQLException {
+        String sql = "SELECT ID, \n" +
+                "       SCHEMA_FILE_ID, \n" +
+                "       SCHEMA_LOCATION, \n" +
+                "       NAMESPACE, \n" +
+                "       DESCRIPTION, \n" +
+                "       VERSION, \n" +
+                "       TYPE, \n" +
+                "       OWNER, \n" +
+                "       APPLIED_SETTINGS_FILE_ID, \n" +
+                "       INTERACTION_TYPE, \n" +
+                "       TEST_MESSAGE, \n" +
+                "       CREATION_DATE, \n" +
+                "       CHANGE_DATE \n" +
+                "FROM UI.INQUIRY_VERSION;";
+        return statement.executeQuery(sql);
+    }
+
+    public void addInquiryVersion(ResultSet record) throws SQLException {
+        String sql = "INSERT INTO UI.INQUIRY_VERSION (\n" +
+                "    ID, \n" +
+                "    SCHEMA_FILE_ID, \n" +
+                "    SCHEMA_LOCATION, \n" +
+                "    NAMESPACE, \n" +
+                "    DESCRIPTION, \n" +
+                "    VERSION, \n" +
+                "    TYPE, \n" +
+                "    OWNER, \n" +
+                "    APPLIED_SETTINGS_FILE_ID, \n" +
+                "    INTERACTION_TYPE, \n" +
+                "    TEST_MESSAGE, \n" +
+                "    CREATION_DATE, \n" +
+                "    CHANGE_DATE\n" +
+                ") VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?);\n";
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ps.setString(1, record.getString("ID"));
+        ps.setString(2, record.getString("SCHEMA_FILE_ID"));
+        ps.setString(3, record.getString("SCHEMA_LOCATION"));
+        ps.setString(4, record.getString("NAMESPACE"));
+        ps.setString(5, record.getString("DESCRIPTION"));
+        ps.setString(6, record.getString("VERSION"));
+        ps.setString(7, record.getString("TYPE"));
+        ps.setString(8, record.getString("OWNER"));
+        ps.setString(9, record.getString("APPLIED_SETTINGS_FILE_ID"));
+        ps.setString(10, record.getString("INTERACTION_TYPE"));
+        ps.setBoolean(11, record.getBoolean("TEST_MESSAGE"));
+        ps.setTimestamp(12, record.getTimestamp("CREATION_DATE"));
+        ps.setTimestamp(13, record.getTimestamp("CHANGE_DATE"));
+        ps.executeUpdate();
+    }
+
+    public ResultSet getInformationSystem() throws SQLException {
+        String sql = "SELECT ID, MNEMONIC, DESCRIPTION, ATTACHMENT_PATH FROM UI.INFORMATION_SYSTEM;";
+        return statement.executeQuery(sql);
+    }
+
+    public void addInformationSystem(ResultSet record) throws SQLException {
+        String sql = "INSERT INTO UI.INFORMATION_SYSTEM (ID, MNEMONIC, DESCRIPTION, ATTACHMENT_PATH) VALUES (?,?,?,?);";
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ps.setString(1, record.getString("ID"));
+        ps.setString(2, record.getString("MNEMONIC"));
+        ps.setString(3, record.getString("DESCRIPTION"));
+        ps.setString(4, record.getString("ATTACHMENT_PATH"));
+        ps.executeUpdate();
+    }
+
+    public ResultSet getRole() throws SQLException {
+        String sql = "SELECT ID, NAME, DESCRIPTION FROM UI.ROLE;";
+        return statement.executeQuery(sql);
+    }
+
+    public void addRole(ResultSet record) throws SQLException {
+        String sql = "INSERT INTO UI.ROLE (ID, NAME, DESCRIPTION) VALUES (?,?,?);";
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ps.setString(1, record.getString("ID"));
+        ps.setString(2, record.getString("NAME"));
+        ps.setString(3, record.getString("DESCRIPTION"));
+        ps.executeUpdate();
+    }
+
+    public ResultSet getUser() throws SQLException {
+        String sql = "SELECT ID, \n" +
+                "       ROLE_ID, \n" +
+                "       NAME, \n" +
+                "       FULL_NAME, \n" +
+                "       PASSWORD, \n" +
+                "       KEYSTORE_ALIAS, \n" +
+                "       KEYSTORE_PASSWORD, \n" +
+                "       DISCONTINUE_DATE, \n" +
+                "       BLOCKED, \n" +
+                "       CREATION_DATE, \n" +
+                "       CHANGE_DATE \n" +
+                "FROM UI.USER;";
+        return statement.executeQuery(sql);
+    }
+
+    public void addUser(ResultSet record) throws SQLException {
+        String sql = "INSERT INTO UI.USER (\n" +
+                "    ID, \n" +
+                "    ROLE_ID, \n" +
+                "    NAME, \n" +
+                "    FULL_NAME, \n" +
+                "    PASSWORD, \n" +
+                "    KEYSTORE_ALIAS, \n" +
+                "    KEYSTORE_PASSWORD, \n" +
+                "    DISCONTINUE_DATE, \n" +
+                "    BLOCKED, \n" +
+                "    CREATION_DATE, \n" +
+                "    CHANGE_DATE\n" +
+                ") VALUES (?,?,?,?,?,?,?,?,?,?,?);";
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ps.setString(1, record.getString("ID"));
+        ps.setString(2, record.getString("ROLE_ID"));
+        ps.setString(3, record.getString("NAME"));
+        ps.setString(4, record.getString("FULL_NAME"));
+        ps.setString(5, record.getString("PASSWORD"));
+        ps.setString(6, record.getString("KEYSTORE_ALIAS"));
+        ps.setString(7, record.getString("KEYSTORE_PASSWORD"));
+        ps.setTimestamp(8, record.getTimestamp("DISCONTINUE_DATE"));
+        ps.setBoolean(9, record.getBoolean("BLOCKED"));
+        ps.setTimestamp(10, record.getTimestamp("CREATION_DATE"));
+        ps.setTimestamp(11, record.getTimestamp("CHANGE_DATE"));
+        ps.executeUpdate();
+    }
 }
